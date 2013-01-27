@@ -1,0 +1,7 @@
+<html>
+	<body>
+		<h3>Hallo ${user.firstname} ${user.lastname}!</h3>
+		<p>Willkommen!</p>
+		<p>Dein Aktivierungsschlüssel lautet: <b>${user.activationKey}</b></p>
+	</body>
+</html>

@@ -1,0 +1,405 @@
+<?xml version="1.0"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>org.bricket.b4</groupId>
+	<artifactId>b4-inren</artifactId>
+	<version>1.0.0-BUILD-SNAPSHOT</version>
+	<packaging>war</packaging>
+	<name>b4-inren</name>
+	<url>http://www.bricket.org</url>
+
+	<developers>
+		<developer>
+			<id>IngoRenner</id>
+			<name>Ingo Renner</name>
+			<email>ingo.renner at bricket.org</email>
+			<organization>Bricket</organization>
+			<organizationUrl>http://www.bricket.org</organizationUrl>
+			<roles>
+				<role>Project lead</role>
+			</roles>
+			<timezone>+1</timezone>
+		</developer>
+	</developers>
+
+	<licenses>
+		<license>
+			<name>Apache License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0</url>
+			<comments>
+				Copyright 2011 the original author or authors.
+
+				Licensed under the Apache License, Version 2.0 (the "License");
+				you may not use this file except in compliance with the License.
+				You may obtain a copy of the License at
+
+				http://www.apache.org/licenses/LICENSE-2.0
+
+				Unless required by applicable law or agreed to in writing, software
+				distributed under the License is distributed on an "AS IS" BASIS,
+				WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+				implied.
+				See the License for the specific language governing permissions and
+				limitations under the License.
+			</comments>
+		</license>
+	</licenses>
+
+	<prerequisites>
+		<maven>2.2.1</maven>
+	</prerequisites>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<java-version>1.7</java-version>
+		<!-- General project dependencies -->
+		<javax.servlet.version>3.0.1</javax.servlet.version>
+		<lombok.version>0.11.6</lombok.version>
+		<!-- The b4 version you are using -->		
+		<org.bricket.b4-version>0.0.1-SNAPSHOT</org.bricket.b4-version>
+		<!-- The spring version to use for tomcat7-maven-plugin -->
+		<spring.version>3.2.0.RELEASE</spring.version>
+		<!-- Wicket core -->
+		<wicket.version>6.4.0</wicket.version>
+		<!-- Add your project specific versions here -->
+		<wicket-dashboard.version>0.6-SNAPSHOT</wicket-dashboard.version>		
+		<wicketstuff.version.version>6.2.1</wicketstuff.version.version>
+		<bootstrap.version>0.7.6</bootstrap.version>
+	</properties>
+
+	<dependencies>
+		<!-- General project dependencies -->
+		<!-- servlet api -->
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>${javax.servlet.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<!-- lombok -->
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>${lombok.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<!-- b4 -->
+		<dependency>
+			<groupId>org.bricket.b4</groupId>
+			<artifactId>b4-security</artifactId>
+			<version>${org.bricket.b4-version}</version>
+		</dependency>
+		<!-- end of General project dependencies -->
+		
+		<!-- more spring -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+			<version>${spring.version}</version>
+			<exclusions>
+				<!-- Exclude Commons Logging in favor of SLF4j -->
+				<exclusion>
+					<groupId>commons-logging</groupId>
+					<artifactId>commons-logging</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		
+		<!-- Wicket -->
+		<dependency>
+			<groupId>org.apache.wicket</groupId>
+			<artifactId>wicket-core</artifactId>
+			<version>${wicket.version}</version>
+		</dependency>
+		<!-- Wicket Security -->
+		<dependency>
+			<groupId>org.apache.wicket</groupId>
+			<artifactId>wicket-auth-roles</artifactId>
+			<version>${wicket.version}</version>
+		</dependency>
+		
+		<!-- we want spring support for wicket -->
+		<dependency>
+			<groupId>org.apache.wicket</groupId>
+			<artifactId>wicket-spring</artifactId>
+			<version>${wicket.version}</version>
+		</dependency>
+        <!-- WICKETSTUFF -->
+        <dependency>
+            <groupId>org.wicketstuff</groupId>
+            <artifactId>wicketstuff-annotation</artifactId>
+            <version>${wicketstuff.version.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.wicket</groupId>
+                    <artifactId>wicket</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+		<!-- Wicket Dashboard -->
+		<dependency>
+			<groupId>ro.fortsoft.wicket.dashboard</groupId>
+			<artifactId>wicket-dashboard-core</artifactId>
+			<version>${wicket-dashboard.version}</version>
+		</dependency>
+
+		<!-- Wicket Dashboard OPTIONAL -->
+		<dependency>
+			<groupId>ro.fortsoft.wicket.dashboard.widgets</groupId>
+			<artifactId>wicket-dashboard-ofchart</artifactId>
+			<version>${wicket-dashboard.version}</version>
+		</dependency>
+
+		<!-- Wicket Dashboard OPTIONAL -->
+		<dependency>
+			<groupId>ro.fortsoft.wicket.dashboard.widgets</groupId>
+			<artifactId>wicket-dashboard-jqplot</artifactId>
+			<version>${wicket-dashboard.version}</version>
+		</dependency>
+
+		<!-- Wicket Dashboard OPTIONAL -->
+		<dependency>
+			<groupId>ro.fortsoft.wicket.dashboard.widgets</groupId>
+			<artifactId>wicket-dashboard-loremipsum</artifactId>
+			<version>${wicket-dashboard.version}</version>
+		</dependency>
+		
+		<!-- Bootstrap -->
+		<dependency>
+		    <groupId>de.agilecoders.wicket</groupId>
+		    <artifactId>bootstrap</artifactId>
+		    <version>${bootstrap.version}</version>
+		</dependency>
+        <dependency>
+            <groupId>de.agilecoders.wicket</groupId>
+            <artifactId>bootstrap-extensions</artifactId>
+		    <version>${bootstrap.version}</version>
+		    <exclusions>
+		    	<exclusion>
+		    		<artifactId>log4j</artifactId>
+		    		<groupId>log4j</groupId>
+		    	</exclusion>
+		    </exclusions>
+        </dependency>
+		
+			<!-- java mail -->
+			<dependency>
+				<groupId>javax.mail</groupId>
+				<artifactId>mail</artifactId>
+				<version>1.4.1</version>
+				<type>jar</type>
+			</dependency>
+
+			<!-- velocity -->
+			<dependency>
+				<groupId>org.apache.velocity</groupId>
+				<artifactId>velocity</artifactId>
+				<version>1.5</version>
+				<type>jar</type>
+			</dependency>
+		
+		<!-- Add your project specific dependencies here -->
+	</dependencies>
+
+	<build>
+	
+		<!-- For wicket, we need the html, css, property files and so on in the war -->
+		<resources>
+			<resource>
+				<filtering>false</filtering>
+				<directory>src/main/resources</directory>
+			</resource>
+			<resource>
+				<filtering>false</filtering>
+				<directory>src/main/java</directory>
+				<includes>
+					<include>**</include>
+				</includes>
+				<excludes>
+					<exclude>**/*.java</exclude>
+				</excludes>
+			</resource>
+		</resources>
+	
+		<testResources>
+			<testResource>
+				<filtering>false</filtering>
+				<directory>src/test/java</directory>
+				<includes>
+					<include>**</include>
+				</includes>
+				<excludes>
+					<exclude>**/*.java</exclude>
+				</excludes>
+			</testResource>
+		</testResources>
+	
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.0</version>
+				<configuration>
+					<source>1.7</source>
+					<target>1.7</target>
+					<encoding>${project.build.sourceEncoding}</encoding>
+					<optimize>true</optimize>
+					<debug>true</debug>
+					<annotationProcessors>
+						<annotationProcessor>lombok.core.AnnotationProcessor</annotationProcessor>
+					</annotationProcessors>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.bsc.maven</groupId>
+				<artifactId>maven-processor-plugin</artifactId>
+				<version>2.0.6</version>
+				<configuration>
+					<!-- source output directory -->
+					<outputDirectory>target/generated-sources/apt</outputDirectory>
+				</configuration>
+				<executions>
+					<execution>
+						<id>process</id>
+						<goals>
+							<goal>process</goal>
+						</goals>
+						<phase>generate-sources</phase>
+						<configuration>
+							<processors>
+								<processor>org.hibernate.jpamodelgen.JPAMetaModelEntityProcessor</processor>
+							</processors>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>build-helper-maven-plugin</artifactId>
+				<version>1.7</version>
+				<executions>
+					<execution>
+						<id>add-source</id>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>add-source</goal>
+						</goals>
+						<configuration>
+							<sources>
+								<source>target/generated-sources/apt</source>
+							</sources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>2.3</version>
+				<configuration>
+					<archive>
+						<manifest>
+							<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+						</manifest>
+					</archive>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.tomcat.maven</groupId>
+				<artifactId>tomcat7-maven-plugin</artifactId>
+				<version>2.0</version>
+				<configuration>
+					<!-- Set your context path here -->
+					<!-- Also set context path in src/main/webapp/META-INF/context.xml -->
+					<path>/</path>
+					<useSeparateTomcatClassLoader>true</useSeparateTomcatClassLoader>
+					<classLoaderClass>org.springframework.instrument.classloading.tomcat.TomcatInstrumentableClassLoader</classLoaderClass>
+				</configuration>
+				<dependencies>
+					<dependency>
+						<groupId>org.springframework</groupId>
+						<artifactId>spring-instrument-tomcat</artifactId>
+						<version>${spring.version}</version>
+					</dependency>
+				</dependencies>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.12.4</version>
+				<configuration>
+					<forkMode>pertest</forkMode>
+					<argLine>-javaagent:${settings.localRepository}/org/springframework/spring-instrument/${spring.version}/spring-instrument-${spring.version}.jar</argLine>
+					<useSystemClassLoader>true</useSystemClassLoader>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-clean-plugin</artifactId>
+				<version>2.5</version>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-deploy-plugin</artifactId>
+				<version>2.7</version>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-install-plugin</artifactId>
+				<version>2.4</version>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>2.6</version>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-site-plugin</artifactId>
+				<version>3.2</version>
+			</plugin>
+			<!--This plugin's configuration is used to store Eclipse m2e settings 
+				only. It has no influence on the Maven build itself. -->
+			<plugin>
+				<groupId>org.eclipse.m2e</groupId>
+				<artifactId>lifecycle-mapping</artifactId>
+				<version>1.0.0</version>
+				<configuration>
+					<lifecycleMappingMetadata>
+						<pluginExecutions>
+							<pluginExecution>
+								<pluginExecutionFilter>
+									<groupId>org.bsc.maven</groupId>
+									<artifactId>maven-processor-plugin</artifactId>
+									<versionRange>[2.0.6,)</versionRange>
+									<goals>
+										<goal>process</goal>
+									</goals>
+								</pluginExecutionFilter>
+								<action>
+									<ignore />
+								</action>
+							</pluginExecution>
+							<pluginExecution>
+								<pluginExecutionFilter>
+									<groupId>org.codehaus.mojo</groupId>
+									<artifactId>build-helper-maven-plugin</artifactId>
+									<versionRange>[1.7,)</versionRange>
+									<goals>
+										<goal>add-source</goal>
+									</goals>
+								</pluginExecutionFilter>
+								<action>
+									<execute />
+								</action>
+							</pluginExecution>
+						</pluginExecutions>
+					</lifecycleMappingMetadata>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>

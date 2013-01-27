@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html wicket:id="html" xmlns:wicket="http://wicket.apache.org">
+    <head>
+        <meta charset="utf-8">
+        <title>InRen</title>
+	    <meta wicket:id="viewport">
+        <meta wicket:id="description">
+        <meta wicket:id="author">
+        <meta wicket:id="chrome-frame">
+
+	<!-- TODO insert by wicket with own resources -->
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- TODO create real Icons: Fav and touch icons -->
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../assets/ico/favicon.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../assets/ico/favicon.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../assets/ico/favicon.png">
+    <link rel="apple-touch-icon-precomposed" href="/demo/ico/favicon.ico">
+    <link rel="shortcut icon" href="/demo/ico/favicon.ico">
+	<style type="text/css">
+      /* Sticky footer styles */
+      html,
+      body {
+        height: 100%;
+        /* The html and body elements cannot have any padding or margin. */
+      }
+      /* Wrapper for page content to push down footer */
+      #wrap {
+        min-height: 100%;
+        height: auto !important;
+        height: 100%;
+        /* Negative indent footer by it's height */
+        margin: 0 auto -20px;
+      }
+
+      /* Set the fixed height of the footer here */
+      #push,
+      #footer {
+        height: 20px;
+      }
+    </style>    
+    </head>
+    <body>
+    <div id="wrap">    
+		<div wicket:id="navbar"></div>
+		<div class="container">
+	    	<div class="row">
+		    	<div class="span2">
+		    		<!--Sidebar content-->
+		    		<span>Left side</span>
+		    	</div>
+		    	<div class="span8">
+		    		<span>Middle</span>
+			    	<!--Body content-->
+	        		<wicket:child/>
+		    	</div>
+		    	<div class="span2">
+		    		<!--Sidebar content-->
+		    		<span>Right side</span>
+		    	</div>
+		    </div>
+		</div>
+		<div id="push"></div>
+    </div>
+        <wicket:panel wicket:id="footer"></wicket:panel>
+        <pre style="display:none" wicket:id="code-internal"></pre>
+        <wicket:container wicket:id="footer-container"/>
+    </body>
+</html>

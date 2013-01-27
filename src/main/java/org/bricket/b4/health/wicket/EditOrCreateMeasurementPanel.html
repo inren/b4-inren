@@ -1,0 +1,30 @@
+<html xmlns:wicket>
+<wicket:panel>
+	<form wicket:id="form">
+		<div>
+			<fieldset>
+				<ol>
+					<li><label for="date" wicket:id="date.label">[date]</label>
+						<input wicket:id="date" type="text" name="date" class="text" /></li>
+				</ol>
+				<ol>
+					<li><label for="weight" wicket:id="weight.label">[weight]</label>
+						<input wicket:id="weight" type="text" name="weight" class="text" /></li>
+				</ol>
+				<ol>
+					<li><label for="fat" wicket:id="fat.label">[fat]</label>
+						<input wicket:id="fat" type="text" name="fat" class="text" /></li>
+				</ol>
+				<ol>
+					<li><label for="water" wicket:id="water.label">[water]</label>
+						<input wicket:id="water" type="text" name="water" class="text" /></li>
+				</ol>
+			</fieldset>
+		</div>
+		<div>
+			<button wicket:id="submit"><wicket:message key="submit.label">[submit]</wicket:message></button>
+			<button wicket:id="cancel"><wicket:message key="cancel.label">[cancel]</wicket:message></button>
+		</div>
+	</form>
+</wicket:panel>
+</html>
