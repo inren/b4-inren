@@ -18,7 +18,7 @@ package org.bricket.b4.core.wicket.panel;
 
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
-import org.bricket.b4.core.wicket.BricketWebSession;
+import org.bricket.b4.core.wicket.B4WebSession;
 import org.bricket.b4.core.wicket.IB4Application;
 import org.bricket.b4.security.service.RoleService.Roles;
 import org.springframework.security.core.GrantedAuthority;
@@ -66,7 +66,7 @@ public abstract class B4Panel extends Panel {
      * @return the logged in user
      */
     public UserDetails getUser() {
-        return ((BricketWebSession) getSession()).getUser();
+        return ((B4WebSession) getSession()).getUser();
     }
 
 
@@ -74,15 +74,15 @@ public abstract class B4Panel extends Panel {
      * @return true if a user is signed in. false otherwise
      */
     public boolean isSignedIn() {
-        return ((BricketWebSession) getSession()).isSignedIn();
+        return ((B4WebSession) getSession()).isSignedIn();
     }
 
 
     /**
      * @return current authenticated wicket web session
      */
-    public BricketWebSession getBricketWebSession() {
-        return (BricketWebSession) BricketWebSession.get();
+    public B4WebSession getB4WebSession() {
+        return (B4WebSession) B4WebSession.get();
     }
 
     public boolean isSuperuser() {

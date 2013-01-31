@@ -36,12 +36,17 @@ import org.bricket.b4.security.service.impl.UserServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.LockedException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.GrantedAuthorityImpl;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -58,9 +63,9 @@ public class AuthenticationServiceImpl extends B4ServiceImpl implements Authenti
     @Resource
     RoleRepository roleRepository;
 
-//    @Autowired
-//    @Qualifier("authenticationManager")
-//    private AuthenticationManager authenticationManager;
+    @Autowired
+    @Qualifier("authenticationManager")
+    private AuthenticationManager authenticationManager;
 
     @Autowired
     private UserServiceImpl userService;
@@ -123,15 +128,15 @@ public class AuthenticationServiceImpl extends B4ServiceImpl implements Authenti
     @Override
     public UserDetailsImpl authenticateUser(String email, String password) throws B4ServiceException {
         try {
-//            Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-//                    email, password));
-//            SecurityContextHolder.getContext().setAuthentication(authentication);
-//
-//            if (authentication.isAuthenticated() && authentication.getPrincipal() instanceof UserDetailsImpl) {
-//                UserDetailsImpl user = ((UserDetailsImpl) authentication.getPrincipal());
-//                log.debug("authenticated user: {}", user);
-//                return user;
-//            }
+            Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+                    email, password));
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+
+            if (authentication.isAuthenticated() && authentication.getPrincipal() instanceof UserDetailsImpl) {
+                UserDetailsImpl user = ((UserDetailsImpl) authentication.getPrincipal());
+                log.debug("authenticated user: {}", user);
+                return user;
+            }
             throw new AuthenticationServiceException(
                     AuthenticationServiceException.AUTHENTICATION_SERVICE_AUTHENTICATION_FAILED);
         } catch (DisabledException de) {

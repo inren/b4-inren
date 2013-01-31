@@ -21,13 +21,18 @@ import java.util.Set;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.Page;
+import org.apache.wicket.Session;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.protocol.http.WebApplication;
+import org.apache.wicket.request.Request;
+import org.apache.wicket.request.Response;
 import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
 import org.apache.wicket.util.visit.IVisit;
 import org.apache.wicket.util.visit.IVisitor;
+import org.bricket.b4.authentication.wicket.B4AuthorizationStrategy;
+import org.bricket.b4.core.wicket.B4WebSession;
 import org.bricket.b4.core.wicket.IB4Application;
 import org.bricket.b4.inren.wicket.pages.HomePage;
 import org.wicketstuff.annotation.scan.AnnotatedMountScanner;
@@ -70,11 +75,19 @@ public class InRenApplication extends WebApplication implements IB4Application {
 	getComponentInstantiationListeners().add(
 		new SpringComponentInjector(this));
 
+	/* wickets own security toolkit B4 style */
+	getSecuritySettings().setAuthorizationStrategy(new B4AuthorizationStrategy());
+	
 	/* Bootstrap */
 	configureBootstrap();
 
 	new AnnotatedMountScanner().scanPackage("org.bricket.b4.*.wicket")
 		.mount(this);
+    }
+
+    @Override
+    public Session newSession(Request request, Response response) {
+        return new B4WebSession(request);
     }
 
     private void configureBootstrap() {

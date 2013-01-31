@@ -53,7 +53,7 @@ public class LoginPanel extends B4Panel {
         signInForm.add(new AjaxButton("submit") {
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-                if (getBricketWebSession().signIn(signInForm.getEmail(), signInForm.getPassword())) {
+                if (getB4WebSession().signIn(signInForm.getEmail(), signInForm.getPassword())) {
                     continueToOriginalDestination();
                     setResponsePage(getApplication().getHomePage());
                 } else {

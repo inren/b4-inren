@@ -16,9 +16,11 @@
  */
 package org.bricket.b4.core.wicket;
 
-import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
-import org.apache.wicket.authroles.authorization.strategies.role.Roles;
+import java.util.ArrayList;
+import java.util.Collection;
+
 import org.apache.wicket.injection.Injector;
+import org.apache.wicket.protocol.http.WebSession;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.bricket.b4.authentication.service.AuthenticationService;
@@ -29,27 +31,29 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+
 //import org.apache.wicket.authentication.AuthenticatedWebSession;
 
 /**
  * @author Henning Teek
  * @author Ingo Renner
  */
-public class BricketWebSession extends AuthenticatedWebSession {
-    private final Logger log = LoggerFactory.getLogger(BricketWebSession.class);
+public class B4WebSession extends WebSession {
+    private final Logger log = LoggerFactory.getLogger(B4WebSession.class);
 
     @SpringBean
     private AuthenticationService authenticationService;
 
+    /** True when the user is signed in */
+    private volatile boolean signedIn = false;
 
     private UserDetails user;
 
-    public BricketWebSession(Request request) {
+    public B4WebSession(Request request) {
         super(request);
         Injector.get().inject(this);
     }
 
-    @Override
     public boolean authenticate(String username, String password) {
         try {
             this.user = authenticationService.authenticateUser(username, password);
@@ -60,14 +64,12 @@ public class BricketWebSession extends AuthenticatedWebSession {
         return false;
     }
 
-    @Override
-    public Roles getRoles() {
-        Roles roles = new Roles();
+    public Collection<String> getRoles() {
+        Collection<String> roles = new ArrayList<String>();
         if (isSignedIn()) {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             if (authentication == null) {
-                log.error("Unexpected: Authentication not found. No roles granted. SecurityContext="
-                        + SecurityContextHolder.getContext().toString());
+                log.error("Unexpected: Authentication not found. No roles granted. SecurityContext=" + SecurityContextHolder.getContext().toString());
             } else {
                 for (GrantedAuthority authority : authentication.getAuthorities()) {
                     roles.add(authority.getAuthority());
@@ -77,8 +79,44 @@ public class BricketWebSession extends AuthenticatedWebSession {
         return roles;
     }
 
+    /**
+     * Try to logon the user. It'll call {@link #authenticate(String, String)} to do the real work and that is what you need to subclass to provide your own
+     * authentication mechanism.
+     * 
+     * @param username
+     * @param password
+     * @return true, if logon was successful
+     */
+    public final boolean signIn(final String username, final String password) {
+        signedIn = authenticate(username, password);
+        if (signedIn) {
+            bind();
+        }
+        return signedIn;
+    }
+
+    public boolean isSignedIn() {
+        return signedIn;
+    }
+
+    /**
+     * Sign the user out.
+     */
+    public void signOut() {
+        signedIn = false;
+    }
+
     public UserDetails getUser() {
         return user;
+    }
+
+    /**
+     * Call signOut() and remove the logon data from where ever they have been persisted (e.g. Cookies)
+     */
+    @Override
+    public void invalidate() {
+        signOut();
+        super.invalidate();
     }
 
 }
