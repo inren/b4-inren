@@ -16,37 +16,33 @@
  */
 package org.bricket.b4.core.wicket.panel;
 
+import java.util.List;
+
+import org.apache.wicket.markup.html.list.ListItem;
+import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
-import org.bricket.b4.securityinren.wicket.panel.IWorktopManageDelegate;
 
 /**
- * Worktop is british for workplace.
- * 
  * @author Ingo Renner
- *
+ * @author Henning Teek
  */
-public class WorktopPanel extends Panel {
-
-    private final String COMPONENT_ID = "WorktopPanelId";
-    private IWorktopManageDelegate delegate;
-
-    public WorktopPanel(String id) {	
-	super(id);
-    }
-
-    public String getComponentId() {
-        return COMPONENT_ID;
-    }
+public class ActionPanel extends Panel {
     
-    @Override
-    protected void onConfigure() {
-        super.onConfigure();
-        if (!hasBeenRendered()) {
-            add(delegate.getManagePanel());
-        }
+    public ActionPanel(String id, List<AActionLink> links) {
+        super(id);
+        add(new ActionListView("listview", links));
     }
 
-    public void setDelegate(IWorktopManageDelegate delegate) {
-        this.delegate = delegate;
+    private static final class ActionListView extends ListView<AActionLink> {
+        
+        private ActionListView(String id, List<? extends AActionLink> list) {
+            super(id, list);
+        }
+
+        @Override
+        protected void populateItem(ListItem<AActionLink> item) {
+            AActionLink link = item.getModelObject();
+            item.add(link.setRenderBodyOnly(true));
+        }
     }
 }

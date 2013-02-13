@@ -16,37 +16,22 @@
  */
 package org.bricket.b4.core.wicket.panel;
 
-import org.apache.wicket.markup.html.panel.Panel;
-import org.bricket.b4.securityinren.wicket.panel.IWorktopManageDelegate;
+import org.apache.wicket.model.StringResourceModel;
+
+import de.agilecoders.wicket.markup.html.bootstrap.image.IconType;
 
 /**
- * Worktop is british for workplace.
- * 
  * @author Ingo Renner
  *
  */
-public class WorktopPanel extends Panel {
+public abstract class CreateActionLink extends AActionB4Link {
 
-    private final String COMPONENT_ID = "WorktopPanelId";
-    private IWorktopManageDelegate delegate;
-
-    public WorktopPanel(String id) {	
-	super(id);
+    public CreateActionLink(boolean ajax) {
+        super(ajax, IconType.plussign);
     }
 
-    public String getComponentId() {
-        return COMPONENT_ID;
-    }
-    
-    @Override
-    protected void onConfigure() {
-        super.onConfigure();
-        if (!hasBeenRendered()) {
-            add(delegate.getManagePanel());
-        }
+    public CreateActionLink(boolean ajax, StringResourceModel message, StringResourceModel label) {
+        super(ajax, IconType.plussign, message, label);
     }
 
-    public void setDelegate(IWorktopManageDelegate delegate) {
-        this.delegate = delegate;
-    }
 }

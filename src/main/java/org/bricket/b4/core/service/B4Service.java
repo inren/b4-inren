@@ -14,26 +14,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.bricket.b4.health.wicket;
+package org.bricket.b4.core.service;
 
-import org.bricket.b4.core.wicket.panel.WorktopPanel;
-
-/**
- * @author Ingo Renner
- *
- */
-public class HealthWorktopPanel extends WorktopPanel {
-
-    public HealthWorktopPanel(String id) {
-	super(id);
-    }
-
-    @Override
-    protected void onConfigure() {
-	super.onConfigure();
-	if (!hasBeenRendered()) {
-	    add(new MeasurementsTable(COMPONENT_ID));
-	}
-    }
-
+public interface B4Service {
+    void init() throws B4ServiceException;
 }

@@ -19,7 +19,7 @@ package org.bricket.b4.mail.service;
 import org.bricket.b4.core.service.B4Service;
 import org.bricket.b4.core.service.B4ServiceException;
 import org.bricket.b4.mail.entity.MailPlugin;
-import org.bricket.b4.security.entity.User;
+import org.bricket.b4.securityinren.entity.User;
 import org.springframework.mail.SimpleMailMessage;
 
 /**

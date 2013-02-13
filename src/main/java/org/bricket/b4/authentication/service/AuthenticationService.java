@@ -20,8 +20,8 @@ import java.util.List;
 
 import org.bricket.b4.core.service.B4Service;
 import org.bricket.b4.core.service.B4ServiceException;
-import org.bricket.b4.security.entity.User;
-import org.bricket.b4.security.service.impl.UserDetailsImpl;
+import org.bricket.b4.securityinren.entity.User;
+import org.bricket.b4.securityinren.service.impl.UserDetailsImpl;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -44,4 +44,6 @@ public interface AuthenticationService extends B4Service {
     GrantedAuthority getGrantedAuthorityByID(String name);
 
     List<GrantedAuthority> getAllAuthorities();
+
+    void activateUser(String email, String activationKey) throws B4ServiceException;
 }

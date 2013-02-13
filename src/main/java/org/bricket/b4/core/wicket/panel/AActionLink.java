@@ -17,36 +17,38 @@
 package org.bricket.b4.core.wicket.panel;
 
 import org.apache.wicket.markup.html.panel.Panel;
-import org.bricket.b4.securityinren.wicket.panel.IWorktopManageDelegate;
+import org.apache.wicket.model.StringResourceModel;
 
 /**
- * Worktop is british for workplace.
- * 
  * @author Ingo Renner
- *
+ * @author Henning Teek
  */
-public class WorktopPanel extends Panel {
+public abstract class AActionLink extends Panel {
+    
+    private final StringResourceModel label;
+    private final StringResourceModel message;
 
-    private final String COMPONENT_ID = "WorktopPanelId";
-    private IWorktopManageDelegate delegate;
-
-    public WorktopPanel(String id) {	
-	super(id);
+    public AActionLink(String id) {
+        this(id, null, null);
     }
 
-    public String getComponentId() {
-        return COMPONENT_ID;
+    public AActionLink(String id, StringResourceModel message) {
+        super(id);
+        this.message = message;
+        this.label = null;
     }
     
-    @Override
-    protected void onConfigure() {
-        super.onConfigure();
-        if (!hasBeenRendered()) {
-            add(delegate.getManagePanel());
-        }
+    public AActionLink(String id, StringResourceModel message, StringResourceModel label) {
+        super(id);
+        this.message = message;
+        this.label = label;
+    }
+    
+    public StringResourceModel getMessage() {
+        return message;
     }
 
-    public void setDelegate(IWorktopManageDelegate delegate) {
-        this.delegate = delegate;
+    public StringResourceModel getLabel() {
+        return label;
     }
 }

@@ -16,37 +16,34 @@
  */
 package org.bricket.b4.core.wicket.panel;
 
-import org.apache.wicket.markup.html.panel.Panel;
-import org.bricket.b4.securityinren.wicket.panel.IWorktopManageDelegate;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.wicket.Component;
 
 /**
- * Worktop is british for workplace.
- * 
  * @author Ingo Renner
- *
+ * @author Henning Teek
  */
-public class WorktopPanel extends Panel {
-
-    private final String COMPONENT_ID = "WorktopPanelId";
-    private IWorktopManageDelegate delegate;
-
-    public WorktopPanel(String id) {	
-	super(id);
-    }
-
-    public String getComponentId() {
-        return COMPONENT_ID;
-    }
+public class ActionPanelBuilder implements Serializable {
     
-    @Override
-    protected void onConfigure() {
-        super.onConfigure();
-        if (!hasBeenRendered()) {
-            add(delegate.getManagePanel());
-        }
+    private final List<AActionLink> links;
+
+    public ActionPanelBuilder() {
+        links = new ArrayList<AActionLink>();
     }
 
-    public void setDelegate(IWorktopManageDelegate delegate) {
-        this.delegate = delegate;
+    public static ActionPanelBuilder getBuilder() {
+        return new ActionPanelBuilder();
+    }
+
+    public final ActionPanelBuilder add(AActionLink link) {
+        links.add(link);
+        return this;
+    }
+
+    public final Component build(String id) {
+        return new ActionPanel(id, links).setOutputMarkupId(true);
     }
 }

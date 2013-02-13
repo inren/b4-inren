@@ -20,12 +20,14 @@ import org.apache.wicket.Component;
 import org.apache.wicket.markup.head.filter.HeaderResponseContainer;
 import org.apache.wicket.markup.html.GenericWebPage;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.StringValue;
 import org.bricket.b4.inren.wicket.pages.HealthWorktopPage;
 import org.bricket.b4.inren.wicket.pages.HomePage;
+import org.bricket.b4.inren.wicket.pages.ManageUsersPage;
 
 import de.agilecoders.wicket.Bootstrap;
 import de.agilecoders.wicket.markup.html.bootstrap.behavior.BootstrapBaseBehavior;
@@ -83,6 +85,8 @@ public class TemplatePage<T> extends GenericWebPage<T> {
         add(newNavbar("navbar"));
         //add(newNavigation("navigation"));
         add(new Footer("footer"));
+        
+        add(new FeedbackPanel("feedbackPanel").setOutputMarkupId(true));
 
         add(new BootstrapBaseBehavior());
         add(new Code("code-internal"));
@@ -107,8 +111,10 @@ public class TemplatePage<T> extends GenericWebPage<T> {
 
     	navbar.addComponents(NavbarComponents.transform(Navbar.ComponentPosition.LEFT,
     			new NavbarButton<HomePage>(HomePage.class, Model.of("Overview")).setIconType(IconType.home),
-    			new NavbarButton<HealthWorktopPage>(HealthWorktopPage.class, Model.of("Health")).setIconType(IconType.home))
-    			);
+    			new NavbarButton<HealthWorktopPage>(HealthWorktopPage.class, Model.of("Health")).setIconType(IconType.heart),
+                        new NavbarButton<HealthWorktopPage>(ManageUsersPage.class, Model.of("Users")).setIconType(IconType.user)
+    	            )
+		);
     	// Theme selector on the right.
     	navbar.addComponents(new ImmutableNavbarComponent(new ThemesDropDown(), Navbar.ComponentPosition.RIGHT));
     	return navbar;

@@ -14,39 +14,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.bricket.b4.core.wicket.panel;
+package org.bricket.b4.securityinren.wicket.panel;
 
+import java.io.Serializable;
+
+import org.apache.wicket.Component;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.panel.Panel;
-import org.bricket.b4.securityinren.wicket.panel.IWorktopManageDelegate;
+import org.apache.wicket.model.IModel;
 
 /**
- * Worktop is british for workplace.
- * 
  * @author Ingo Renner
  *
  */
-public class WorktopPanel extends Panel {
-
-    private final String COMPONENT_ID = "WorktopPanelId";
-    private IWorktopManageDelegate delegate;
-
-    public WorktopPanel(String id) {	
-	super(id);
-    }
-
-    public String getComponentId() {
-        return COMPONENT_ID;
-    }
+public interface IWorktopManageDelegate<T extends Serializable> extends Serializable {
     
-    @Override
-    protected void onConfigure() {
-        super.onConfigure();
-        if (!hasBeenRendered()) {
-            add(delegate.getManagePanel());
-        }
-    }
-
-    public void setDelegate(IWorktopManageDelegate delegate) {
-        this.delegate = delegate;
-    }
+    Panel getManagePanel();
+    
+    Panel getEditPanel(IModel<T> model);
+    
+    void switchToComponent(AjaxRequestTarget target, Component replacement);
 }

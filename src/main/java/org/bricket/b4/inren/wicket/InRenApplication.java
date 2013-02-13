@@ -17,12 +17,16 @@
 package org.bricket.b4.inren.wicket;
 
 import java.util.HashSet;
+import java.util.Locale;
+import java.util.MissingResourceException;
 import java.util.Set;
 
 import org.apache.wicket.Component;
+import org.apache.wicket.Localizer;
 import org.apache.wicket.Page;
 import org.apache.wicket.Session;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.Response;
@@ -59,30 +63,45 @@ public class InRenApplication extends WebApplication implements IB4Application {
     }
 
     public static InRenApplication get() {
-	return (InRenApplication) WebApplication.get();
+        return (InRenApplication) WebApplication.get();
     }
 
     @Override
     public Class<? extends Page> getHomePage() {
-	return HomePage.class;
+        return HomePage.class;
     }
 
     @Override
     protected void init() {
-	super.init();
+        super.init();
 
-	/* Spring injection */
-	getComponentInstantiationListeners().add(
-		new SpringComponentInjector(this));
+        /* Spring injection */
+        getComponentInstantiationListeners().add(
+                new SpringComponentInjector(this));
 
-	/* wickets own security toolkit B4 style */
-	getSecuritySettings().setAuthorizationStrategy(new B4AuthorizationStrategy());
-	
-	/* Bootstrap */
-	configureBootstrap();
+        /* wickets own security toolkit B4 style */
+        getSecuritySettings().setAuthorizationStrategy(new B4AuthorizationStrategy());
 
-	new AnnotatedMountScanner().scanPackage("org.bricket.b4.*.wicket")
-		.mount(this);
+        /* Bootstrap */
+        configureBootstrap();
+
+        new AnnotatedMountScanner().scanPackage("org.bricket.b4.*.wicket").mount(this);
+
+        Localizer localizer = new Localizer() {
+
+            @Override
+            public String getString(String key, Component component, IModel<?> model, Locale locale, String style, String defaultValue)
+                    throws MissingResourceException {
+                try {
+                    return super.getString(key, component, model, locale, style, defaultValue);
+                } catch (MissingResourceException e) {
+                    return key + (locale==null? "": locale.getLanguage());
+                }
+            }
+
+        };
+
+        this.getResourceSettings().setLocalizer(localizer);
     }
 
     @Override
@@ -91,58 +110,58 @@ public class InRenApplication extends WebApplication implements IB4Application {
     }
 
     private void configureBootstrap() {
-	BootstrapSettings settings = new BootstrapSettings();
-	settings.minify(true)
-		// use minimized version of all bootstrap references
-		.useJqueryPP(true).useModernizr(true).useResponsiveCss(true)
-		.setJsResourceFilterName("footer-container")
-		.getBootstrapLessCompilerSettings().setUseLessCompiler(false);
+        BootstrapSettings settings = new BootstrapSettings();
+        settings.minify(true)
+        // use minimized version of all bootstrap references
+        .useJqueryPP(true).useModernizr(true).useResponsiveCss(true)
+        .setJsResourceFilterName("footer-container")
+        .getBootstrapLessCompilerSettings().setUseLessCompiler(false);
 
-	ThemeProvider themeProvider = new BootswatchThemeProvider() {
-	    {
-		add(new MetroTheme());
-		defaultTheme("cyborg");
-	    }
-	};
-	settings.setThemeProvider(themeProvider);
+        ThemeProvider themeProvider = new BootswatchThemeProvider() {
+            {
+                add(new MetroTheme());
+                defaultTheme("cyborg");
+            }
+        };
+        settings.setThemeProvider(themeProvider);
 
-	Bootstrap.install(this, settings);
-	configureResourceBundles();
+        Bootstrap.install(this, settings);
+        configureResourceBundles();
     }
 
     /**
      * configure all resource bundles (css and js)
      */
     private void configureResourceBundles() {
-	setHeaderResponseDecorator(new RenderJavaScriptToFooterHeaderResponseDecorator());
+        setHeaderResponseDecorator(new RenderJavaScriptToFooterHeaderResponseDecorator());
 
-	getResourceBundles()
-		.addJavaScriptBundle(
-			InRenApplication.class,
-			"core.js",
-			(JavaScriptResourceReference) getJavaScriptLibrarySettings()
-				.getJQueryReference(),
-			(JavaScriptResourceReference) getJavaScriptLibrarySettings()
-				.getWicketEventReference(),
-			(JavaScriptResourceReference) getJavaScriptLibrarySettings()
-				.getWicketAjaxReference(),
-			(JavaScriptResourceReference) ModernizrJavaScriptReference.INSTANCE);
+        getResourceBundles()
+        .addJavaScriptBundle(
+                InRenApplication.class,
+                "core.js",
+                (JavaScriptResourceReference) getJavaScriptLibrarySettings()
+                .getJQueryReference(),
+                (JavaScriptResourceReference) getJavaScriptLibrarySettings()
+                .getWicketEventReference(),
+                (JavaScriptResourceReference) getJavaScriptLibrarySettings()
+                .getWicketAjaxReference(),
+                (JavaScriptResourceReference) ModernizrJavaScriptReference.INSTANCE);
 
-	getResourceBundles().addJavaScriptBundle(InRenApplication.class,
-		"bootstrap-extensions.js",
-		JQueryUIJavaScriptReference.instance(),
-		Html5PlayerJavaScriptReference.instance());
+        getResourceBundles().addJavaScriptBundle(InRenApplication.class,
+                "bootstrap-extensions.js",
+                JQueryUIJavaScriptReference.instance(),
+                Html5PlayerJavaScriptReference.instance());
 
-	getResourceBundles().addCssBundle(InRenApplication.class,
-		"bootstrap-extensions.css", Html5PlayerCssReference.instance());
+        getResourceBundles().addCssBundle(InRenApplication.class,
+                "bootstrap-extensions.css", Html5PlayerCssReference.instance());
 
-	getResourceBundles().addCssBundle(
-		InRenApplication.class,
-		"application.css",
-		(CssResourceReference) Bootstrap.getSettings()
-			.getResponsiveCssResourceReference(),
-		(CssResourceReference) BootstrapPrettifyCssReference.INSTANCE
-		);
+        getResourceBundles().addCssBundle(
+                InRenApplication.class,
+                "application.css",
+                (CssResourceReference) Bootstrap.getSettings()
+                .getResponsiveCssResourceReference(),
+                (CssResourceReference) BootstrapPrettifyCssReference.INSTANCE
+                );
     }
 
     @Override
@@ -163,5 +182,5 @@ public class InRenApplication extends WebApplication implements IB4Application {
             }
         }
     }
-    
+
 }

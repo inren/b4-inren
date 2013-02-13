@@ -33,7 +33,7 @@ import org.bricket.b4.mail.repository.MailPluginRepository;
 import org.bricket.b4.mail.service.MailPluginService;
 import org.bricket.b4.mail.service.MailServiceException;
 import org.bricket.b4.mail.service.MailserverService;
-import org.bricket.b4.security.entity.User;
+import org.bricket.b4.securityinren.entity.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

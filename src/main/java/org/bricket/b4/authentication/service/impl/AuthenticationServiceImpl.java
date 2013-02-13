@@ -26,13 +26,13 @@ import org.bricket.b4.authentication.service.AuthenticationServiceException;
 import org.bricket.b4.core.service.B4ServiceException;
 import org.bricket.b4.core.service.B4ServiceImpl;
 import org.bricket.b4.mail.service.MailPluginService;
-import org.bricket.b4.security.entity.Role;
-import org.bricket.b4.security.entity.User;
-import org.bricket.b4.security.repository.RoleRepository;
-import org.bricket.b4.security.repository.UserRepository;
-import org.bricket.b4.security.service.RoleService;
-import org.bricket.b4.security.service.impl.UserDetailsImpl;
-import org.bricket.b4.security.service.impl.UserServiceImpl;
+import org.bricket.b4.securityinren.entity.Role;
+import org.bricket.b4.securityinren.entity.User;
+import org.bricket.b4.securityinren.repository.RoleRepository;
+import org.bricket.b4.securityinren.repository.UserRepository;
+import org.bricket.b4.securityinren.service.RoleService;
+import org.bricket.b4.securityinren.service.impl.UserDetailsImpl;
+import org.bricket.b4.securityinren.service.impl.UserServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -157,27 +157,27 @@ public class AuthenticationServiceImpl extends B4ServiceImpl implements Authenti
         }
     }
 
-//    @Override
-//    @Transactional
-//    public void activateUser(String email, String activationKey) throws B4ServiceException {
-//        activateUser(userService.loadUserByEmailAndActivationKey(email, activationKey));
-//    }
-//
-//    private void activateUser(User user) throws B4ServiceException {
-//        if (user != null && !user.isEnabled()) {
-//            try {
-//                user.setEnabled(true);
-//                userService.saveUser(user);
-//                log.debug("activated user: {}", user);
-//                return;
-//            } catch (B4ServiceException bse) {
-//                throw new AuthenticationServiceException(
-//                        AuthenticationServiceException.AUTHENTICATION_SERVICE_ACTIVATION_FAILED, bse);
-//            }
-//        }
-//        throw new AuthenticationServiceException(
-//                AuthenticationServiceException.AUTHENTICATION_SERVICE_ACTIVATION_FAILED);
-//    }
+    @Override
+    @Transactional
+    public void activateUser(String email, String activationKey) throws B4ServiceException {
+        activateUser(userService.loadUserByEmailAndActivationKey(email, activationKey));
+    }
+
+    private void activateUser(User user) throws B4ServiceException {
+        if (user != null && !user.getEnabled()) {
+            try {
+                user.setEnabled(true);
+                userService.saveUser(user);
+                log.debug("activated user: {}", user);
+                return;
+            } catch (B4ServiceException bse) {
+                throw new AuthenticationServiceException(
+                        AuthenticationServiceException.AUTHENTICATION_SERVICE_ACTIVATION_FAILED, bse);
+            }
+        }
+        throw new AuthenticationServiceException(
+                AuthenticationServiceException.AUTHENTICATION_SERVICE_ACTIVATION_FAILED);
+    }
 
     @Override
     public List<GrantedAuthority> getAllAuthorities() {

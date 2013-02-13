@@ -18,9 +18,10 @@ package org.bricket.b4.core.wicket.panel;
 
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.IModel;
 import org.bricket.b4.core.wicket.B4WebSession;
 import org.bricket.b4.core.wicket.IB4Application;
-import org.bricket.b4.security.service.RoleService.Roles;
+import org.bricket.b4.securityinren.service.RoleService.Roles;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -32,10 +33,15 @@ import org.springframework.security.core.userdetails.UserDetails;
  * @author Henning Teek
  */
 public abstract class B4Panel extends Panel {
+    
     private FeedbackPanel feedback;
-
+    
     public B4Panel(String id) {
         super(id);
+    }
+    
+    public B4Panel(String id, IModel<?> model) {
+        super(id, model);
     }
 
     @Override
