@@ -1,25 +1,41 @@
 <html xmlns:wicket>
 <wicket:panel>
-	<form wicket:id="form">
-		<div>
-			<fieldset>
-				<ol>
-					<li><label for="email" wicket:id="email.label">[email]</label>
-						<input wicket:id="email" type="text" name="email" class="text" /></li>
-					<li><label for="password" wicket:id="password.label">[password]</label>
-						<input wicket:id="password" type="password" name="password" class="text" /></li>
-					<li><label for="passwordrepeat" wicket:id="passwordrepeat.label">[passwordrepeat]</label>
-						<input wicket:id="passwordrepeat" type="password" name="passwordrepeat" class="text" /></li>
-					<li><label for="firstname" wicket:id="firstname.label">[firstname]</label>
-						<input wicket:id="firstname" type="text" name="firstname" class="text" /></li>
-					<li><label for="lastname" wicket:id="lastname.label">[lastname]</label>
-						<input wicket:id="lastname" type="text" name="lastname" class="text" /></li>
-				</ol>
-			</fieldset>
+	<form wicket:id="form" class="form-horizontal">
+		<div class="control-group">
+			<label class="control-label" for="email" wicket:id="email.label">[email]</label>
+			<div class="controls">
+				<input wicket:id="email" type="text" name="email" class="text" />
+			</div>
 		</div>
-		<div>
-			<button wicket:id="submit"><wicket:message key="submit.label">[submit]</wicket:message></button>
-			<button wicket:id="cancel"><wicket:message key="cancel.label">[cancel]</wicket:message></button>
+		<div class="control-group">
+			<label class="control-label" for="password" wicket:id="password.label">[password]</label>
+			<div class="controls">
+				<input wicket:id="password" type="password" name="password" class="text" />
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label" for="passwordrepeat" wicket:id="passwordrepeat.label">[passwordrepeat]</label>
+			<div class="controls">
+				<input wicket:id="passwordrepeat" type="password" name="passwordrepeat" class="text" />
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label" for="firstname" wicket:id="firstname.label">[firstname]</label>
+			<div class="controls">
+				<input wicket:id="firstname" type="text" name="firstname" class="text" />
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label" for="lastname" wicket:id="lastname.label">[lastname]</label>
+			<div class="controls">
+				<input wicket:id="lastname" type="text" name="lastname" class="text" />
+			</div>
+		</div>
+		<div class="control-group">
+			<div class="controls">
+				<button class="btn" wicket:id="submit"><wicket:message key="submit.label">[submit]</wicket:message></button>
+				<button class="btn" wicket:id="cancel"><wicket:message key="cancel.label">[cancel]</wicket:message></button>
+			</div>
 		</div>
 	</form>
 </wicket:panel>

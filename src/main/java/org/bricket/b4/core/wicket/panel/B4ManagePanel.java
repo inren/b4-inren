@@ -25,7 +25,7 @@ import org.apache.wicket.model.IModel;
  * @author Henning Teek
  * 
  */
-public abstract class B4ManagePanel extends B4Panel {
+public abstract class B4ManagePanel extends ABasePanel {
     
     public B4ManagePanel(String id) {
         super(id);

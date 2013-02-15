@@ -25,6 +25,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.StringResourceModel;
 
+import de.agilecoders.wicket.markup.html.bootstrap.behavior.CssClassNameAppender;
 import de.agilecoders.wicket.markup.html.bootstrap.image.Icon;
 import de.agilecoders.wicket.markup.html.bootstrap.image.IconType;
 
@@ -93,9 +94,10 @@ public abstract class AActionB4Link extends AActionLink {
 
         link.add(new Icon(iconType));
         if (getLabel()!=null) {
-            link.add(new Label("label", getLabel()));
+            link.add(new Label("label", getLabel()).setRenderBodyOnly(true));
+            link.add(new CssClassNameAppender("btn"));
         } else {
-            link.add(new Label("label", "").setVisible(false));
+            link.add(new Label("label", "").setRenderBodyOnly(true));
         }
         add(link);
     }
@@ -112,9 +114,10 @@ public abstract class AActionB4Link extends AActionLink {
         }
         link.add(new Icon(iconType));
         if (getLabel()!=null) {
-            link.add(new Label("label", getLabel()));
+            link.add(new Label("label", getLabel()).setRenderBodyOnly(true));
+            link.add(new CssClassNameAppender("btn"));
         } else {
-            link.add(new Label("label", "").setVisible(false));
+            link.add(new Label("label", "").setRenderBodyOnly(true));
         }
         add(link);
     }

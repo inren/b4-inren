@@ -27,13 +27,13 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.util.value.ValueMap;
-import org.bricket.b4.core.wicket.panel.B4Panel;
+import org.bricket.b4.core.wicket.panel.ABasePanel;
 
 /**
  * @author Ingo Renner
  * 
  */
-public class LoginPanel extends B4Panel {
+public class LoginPanel extends ABasePanel {
 
     public LoginPanel(String id) {
         super(id);

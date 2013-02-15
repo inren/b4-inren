@@ -27,20 +27,20 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 
 /**
- * Basic bricket panel with common utility methods.
+ * Base panel with common utility methods.
  * 
  * @author Ingo Renner
  * @author Henning Teek
  */
-public abstract class B4Panel extends Panel {
+public abstract class ABasePanel extends Panel {
     
     private FeedbackPanel feedback;
     
-    public B4Panel(String id) {
+    public ABasePanel(String id) {
         super(id);
     }
     
-    public B4Panel(String id, IModel<?> model) {
+    public ABasePanel(String id, IModel<?> model) {
         super(id, model);
     }
 
@@ -62,7 +62,7 @@ public abstract class B4Panel extends Panel {
     protected abstract void initGui();
 
     /**
-     * @return the bricket feedback panel
+     * @return the feedback panel
      */
     public FeedbackPanel getFeedback() {
         return feedback;

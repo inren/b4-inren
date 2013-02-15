@@ -37,6 +37,13 @@ import org.bricket.b4.securityinren.entity.User;
 import org.bricket.b4.securityinren.repository.UserRepository;
 import org.bricket.b4.securityinren.service.UserService;
 
+import de.agilecoders.wicket.markup.html.bootstrap.button.ButtonGroup;
+import de.agilecoders.wicket.markup.html.bootstrap.button.ButtonSize;
+import de.agilecoders.wicket.markup.html.bootstrap.button.ButtonType;
+import de.agilecoders.wicket.markup.html.bootstrap.button.TypedAjaxLink;
+import de.agilecoders.wicket.markup.html.bootstrap.image.IconType;
+import de.agilecoders.wicket.markup.html.bootstrap.table.TableBehavior;
+
 /**
  * @author Ingo Renner
  */
@@ -59,8 +66,8 @@ public class ManageUsersPanel extends B4ManagePanel implements IAdminPanel {
     @Override
     protected final Component getTable(final String id) {
         AjaxFallbackDefaultDataTableBuilder<User> builder = new AjaxFallbackDefaultDataTableBuilder<User>(ManageUsersPanel.this);
-        return 
-                builder.addDataProvider(new RepositoryDataProvider<User>(userRepository))
+         
+        Component table =  builder.addDataProvider(new RepositoryDataProvider<User>(userRepository))
                 .add(new AbstractColumn<Object, Object>(new StringResourceModel("actions.label", ManageUsersPanel.this, null)) {
                     @Override
                     public void populateItem(Item<ICellPopulator<Object>> cellItem, String componentId, IModel<Object> rowModel) {
@@ -99,25 +106,87 @@ public class ManageUsersPanel extends B4ManagePanel implements IAdminPanel {
                             };
                             linkBuilder.add(removeLink);
                         }
-                        cellItem.add(linkBuilder.build(componentId));
+                        
+//                         cellItem.add(linkBuilder.build(componentId));
+                        
+                        ButtonGroup bg = new ButtonGroup(componentId);
+                        TypedAjaxLink<String> edit = new TypedAjaxLink<String>("button", ButtonType.Menu){
+
+                            @Override
+                            public void onClick(AjaxRequestTarget target) {
+                                delegate.switchToComponent(target, delegate.getEditPanel(new Model<User>(user)));
+                                
+                            }};
+                            edit.setIconType(IconType.pencil);
+                            edit.setSize(ButtonSize.Mini);
+                            edit.setInverted(false);
+                            bg.addButton(edit);
+                            
+                            // only delete other users
+                            if (!getUser().getUsername().equals(user.getEmail())) {
+                                TypedAjaxLink<String> delete = new TypedAjaxLink<String>("button", ButtonType.Menu){
+
+                                    @Override
+                                    public void onClick(AjaxRequestTarget target) {
+                                        
+                                        try {
+                                            // feedback
+                                            getSession().getFeedbackMessages().clear();
+                                            target.add(getFeedback());
+                                            // delete
+                                            userRepository.delete(user.getId());
+                                            // manage
+                                            Component table = getTable(id);
+                                            ManageUsersPanel.this.addOrReplace(table);
+                                            target.add(table);
+                                        } catch (Exception e) {
+                                            error(e.getMessage());
+                                            target.add(getFeedback());
+                                        }
+                                    }
+                                };
+                                delete.setIconType(IconType.trash);
+                                delete.setSize(ButtonSize.Mini);
+                                delete.setInverted(false);
+                                bg.addButton(delete);
+                            }
+                            // bg.add(new ToolbarBehavior());
+                            cellItem.add(bg);
                     }
                 }).addPropertyColumn("id", true).addPropertyColumn("email", true).addPropertyColumn("firstname", true)
                 .addPropertyColumn("lastname", true).addBooleanPropertyColumn("enabled", true)
                 .addPropertyColumn("activationKey", true).setNumberOfRows(10).build(id);
+        TableBehavior tableBehavior = new TableBehavior().bordered().condensed();
+        table.add(tableBehavior);
+        return table;
     }
 
     @Override
     protected Component getActionPanel(String id) {
-        final ActionPanelBuilder linkBuilder = ActionPanelBuilder.getBuilder();
         // create link
         StringResourceModel srm = new StringResourceModel("actions.create.user", ManageUsersPanel.this, null);
-        linkBuilder.add(new CreateActionLink(true, null, srm) {
+        CreateActionLink link = new CreateActionLink(true, null, srm) {
             @Override
             public void onClick(AjaxRequestTarget target) {
                 delegate.switchToComponent(target, delegate.getEditPanel(null));
             }
-        });
-        return linkBuilder.build(id);
+        };
+
+        ButtonGroup bg = new ButtonGroup(id);
+        TypedAjaxLink<String> create = new TypedAjaxLink<String>("button", srm, ButtonType.Primary){
+
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                delegate.switchToComponent(target, delegate.getEditPanel(null));
+            }};
+            create.setIconType(IconType.plussign);
+        bg.addButton(create);
+        
+        
+        
+        final ActionPanelBuilder linkBuilder = ActionPanelBuilder.getBuilder();
+        linkBuilder.add(link);
+        return bg; //linkBuilder.build(id);
     }
     
 }

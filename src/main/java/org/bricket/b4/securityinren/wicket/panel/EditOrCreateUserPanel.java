@@ -32,7 +32,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.bricket.b4.core.service.B4ServiceException;
-import org.bricket.b4.core.wicket.panel.B4Panel;
+import org.bricket.b4.core.wicket.panel.ABasePanel;
 import org.bricket.b4.core.wicket.panel.IAdminPanel;
 import org.bricket.b4.securityinren.entity.User;
 import org.bricket.b4.securityinren.service.UserService;
@@ -40,7 +40,7 @@ import org.bricket.b4.securityinren.service.UserService;
 /**
  * @author Ingo Renner
  */
-public class EditOrCreateUserPanel extends B4Panel implements IAdminPanel {
+public class EditOrCreateUserPanel extends ABasePanel implements IAdminPanel {
     @SpringBean
     private UserService userService;
 
