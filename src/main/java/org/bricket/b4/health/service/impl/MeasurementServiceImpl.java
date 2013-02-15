@@ -6,13 +6,14 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.wicket.extensions.markup.html.repeater.data.table.ISortableDataProvider;
-import org.bricket.b4.core.wicket.dataprovider.RepositoryDataProvider;
 import org.bricket.b4.health.entity.Measurement;
 import org.bricket.b4.health.repository.MeasurementRepository;
 import org.bricket.b4.health.service.MeasurementService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import de.inren.frontend.common.dataprovider.RepositoryDataProvider;
 
 /**
  * @author Ingo Renner
