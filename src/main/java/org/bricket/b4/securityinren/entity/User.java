@@ -16,6 +16,7 @@
  */
 package org.bricket.b4.securityinren.entity;
 
+import java.util.Date;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -42,22 +43,37 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
  */
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Entity
-@Table(name = "b4_User", uniqueConstraints = @UniqueConstraint(columnNames = "email"))
+@Table(name = "inren_User", uniqueConstraints = @UniqueConstraint(columnNames = "email"))
 @Data
 @ToString(exclude = { "password" })
 @EqualsAndHashCode(callSuper = true, exclude = "groups")
 public class User extends DomainObject {
+    
     @Column(nullable = false)
     private String email;
 
-    private String password;
-
     private String firstname;
-
+    
     private String lastname;
-
+    
+    private String password;
+    
+    /** Remainder for the password, can be null */
+    private String passRemainder;
+    
+    /** Date the account was created */
+    private Date registeredDate;
+    
+    /** Date of the last login */
+    private Date lastLogin;
+    
+    /** if enabled, user can log in */
     private Boolean enabled;
 
+    /** we don't delete users, we just mark them as deleted */
+    private Boolean deleted;
+    
+    
     private String activationKey;
 
     @ManyToMany(fetch = FetchType.EAGER)

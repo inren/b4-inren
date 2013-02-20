@@ -14,36 +14,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.inren.frontend.common.panel;
+package de.inren.frontend.role;
 
 import org.apache.wicket.Component;
-import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.model.IModel;
+import org.bricket.b4.securityinren.entity.Role;
+import org.wicketstuff.annotation.mount.MountPath;
+
+import de.inren.frontend.common.panel.WorktopPanel;
+import de.inren.frontend.common.templates.SecuredPage;
 
 /**
  * @author Ingo Renner
- * @author Henning Teek
- * 
+ *
  */
-public abstract class B4ManagePanel extends ABasePanel {
-    
-    public B4ManagePanel(String id) {
-        super(id);
-    }
-
-    public B4ManagePanel(String id, IModel<?> model) {
-        super(id, model);
-    }
+@MountPath(value = "/roles")
+public class ManageRolesPage  extends SecuredPage<Role> {
 
     @Override
-    protected void initGui() {
-        add(getTable("table"));
-        add(getActionPanel("create"));
-    }
-
-    protected abstract Component getTable(final String id);
-
-    protected Component getActionPanel(final String id) {
-        return new Label(id).setVisible(false);
+    public Component createPanel(String wicketId) {
+        final WorktopPanel w = new WorktopPanel (wicketId);
+        w.setDelegate(new RoleWorktopManageDelegate(w));
+        return w;
     }
 }

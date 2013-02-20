@@ -53,4 +53,14 @@ public class RoleServiceImpl extends B4ServiceImpl implements RoleService {
         }
         log.info("role service initialized");
     }
+
+    @Override
+    public Role saveRole(Role role) throws B4ServiceException {
+        try {
+            role = roleRepository.save(role);
+        } catch (Exception e) {
+            throw new B4ServiceException("error");
+        }
+        return role;
+    }
 }

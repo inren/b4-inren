@@ -38,7 +38,7 @@ import de.agilecoders.wicket.markup.html.bootstrap.table.TableBehavior;
 import de.inren.frontend.common.dataprovider.RepositoryDataProvider;
 import de.inren.frontend.common.manage.IWorktopManageDelegate;
 import de.inren.frontend.common.panel.ActionPanelBuilder;
-import de.inren.frontend.common.panel.B4ManagePanel;
+import de.inren.frontend.common.panel.ManagePanel;
 import de.inren.frontend.common.panel.CreateActionLink;
 import de.inren.frontend.common.panel.DeleteActionLink;
 import de.inren.frontend.common.panel.EditActionLink;
@@ -48,7 +48,7 @@ import de.inren.frontend.common.table.AjaxFallbackDefaultDataTableBuilder;
 /**
  * @author Ingo Renner
  */
-public class ManageUsersPanel extends B4ManagePanel implements IAdminPanel {
+public class ManageUsersPanel extends ManagePanel implements IAdminPanel {
     
     @SpringBean
     private UserService userService;

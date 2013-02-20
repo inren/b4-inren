@@ -14,25 +14,36 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.bricket.b4.securityinren.service;
+package de.inren.frontend.common.panel;
 
-import org.bricket.b4.core.service.B4Service;
-import org.bricket.b4.core.service.B4ServiceException;
-import org.bricket.b4.securityinren.entity.Role;
+import org.apache.wicket.Component;
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.model.IModel;
 
 /**
  * @author Ingo Renner
  * @author Henning Teek
+ * 
  */
-public interface RoleService extends B4Service {
-    /**
-     * Enumeration of all default roles
-     * 
-     * @author Henning Teek
-     */
-    public enum Roles {
-        ROLE_ADMIN, ROLE_USER;
+public abstract class ManagePanel extends ABasePanel {
+    
+    public ManagePanel(String id) {
+        super(id);
     }
 
-    Role saveRole(Role modelObject) throws B4ServiceException;
+    public ManagePanel(String id, IModel<?> model) {
+        super(id, model);
+    }
+
+    @Override
+    protected void initGui() {
+        add(getTable("table"));
+        add(getActionPanel("create"));
+    }
+
+    protected abstract Component getTable(final String id);
+
+    protected Component getActionPanel(final String id) {
+        return new Label(id).setVisible(false);
+    }
 }

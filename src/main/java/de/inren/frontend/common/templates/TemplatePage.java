@@ -16,10 +16,14 @@
  */
 package de.inren.frontend.common.templates;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.head.filter.HeaderResponseContainer;
 import org.apache.wicket.markup.html.GenericWebPage;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -33,13 +37,18 @@ import de.agilecoders.wicket.markup.html.bootstrap.html.ChromeFrameMetaTag;
 import de.agilecoders.wicket.markup.html.bootstrap.html.HtmlTag;
 import de.agilecoders.wicket.markup.html.bootstrap.html.MetaTag;
 import de.agilecoders.wicket.markup.html.bootstrap.image.IconType;
+import de.agilecoders.wicket.markup.html.bootstrap.navbar.INavbarComponent;
 import de.agilecoders.wicket.markup.html.bootstrap.navbar.ImmutableNavbarComponent;
 import de.agilecoders.wicket.markup.html.bootstrap.navbar.Navbar;
 import de.agilecoders.wicket.markup.html.bootstrap.navbar.NavbarButton;
 import de.agilecoders.wicket.markup.html.bootstrap.navbar.NavbarComponents;
 import de.agilecoders.wicket.settings.IBootstrapSettings;
 import de.inren.frontend.application.HomePage;
+import de.inren.frontend.auth.LoginPage;
+import de.inren.frontend.auth.LogoutPage;
+import de.inren.frontend.common.session.B4WebSession;
 import de.inren.frontend.health.HealthWorktopPage;
+import de.inren.frontend.role.ManageRolesPage;
 import de.inren.frontend.user.ManageUsersPage;
 
 /**
@@ -85,6 +94,9 @@ public class TemplatePage<T> extends GenericWebPage<T> {
         add(newNavbar("navbar"));
         //add(newNavigation("navigation"));
         add(new Footer("footer"));
+
+        add(getLeftComponent("left"));
+        add(getRightComponent("right"));
         
         add(new FeedbackPanel("feedbackPanel").setOutputMarkupId(true));
 
@@ -112,12 +124,32 @@ public class TemplatePage<T> extends GenericWebPage<T> {
     	navbar.addComponents(NavbarComponents.transform(Navbar.ComponentPosition.LEFT,
     			new NavbarButton<HomePage>(HomePage.class, Model.of("Overview")).setIconType(IconType.home),
     			new NavbarButton<HealthWorktopPage>(HealthWorktopPage.class, Model.of("Health")).setIconType(IconType.heart),
-                        new NavbarButton<HealthWorktopPage>(ManageUsersPage.class, Model.of("Users")).setIconType(IconType.user)
+                        new NavbarButton<ManageUsersPage>(ManageUsersPage.class, Model.of("Users")).setIconType(IconType.user),
+                        new NavbarButton<ManageRolesPage>(ManageRolesPage.class, Model.of("Roles")).setIconType(IconType.user)
     	            )
+    	            
 		);
     	// Theme selector on the right.
-    	navbar.addComponents(new ImmutableNavbarComponent(new ThemesDropDown(), Navbar.ComponentPosition.RIGHT));
+    	final List<INavbarComponent> components = new ArrayList<INavbarComponent>();
+    	components.add(new ImmutableNavbarComponent(new ThemesDropDown(), Navbar.ComponentPosition.RIGHT));
+    	if (isSignedIn()) {
+    	    components.add(new ImmutableNavbarComponent(
+    	            new NavbarButton<LogoutPage>(LogoutPage.class, Model.of("Logout")).setIconType(IconType.globe))
+    	    );
+    	} else {
+            components.add(new ImmutableNavbarComponent(
+                    new NavbarButton<LoginPage>(LoginPage.class, Model.of("Login")).setIconType(IconType.globe))
+            );
+    	}
+    	navbar.addComponents(components);
     	return navbar;
+    }
+    
+    /**
+     * @return true if a user is signed in. false otherwise
+     */
+    public boolean isSignedIn() {
+        return ((B4WebSession) getSession()).isSignedIn();
     }
     
     protected boolean hasNavigation() {
@@ -151,4 +183,11 @@ public class TemplatePage<T> extends GenericWebPage<T> {
         }
     }
     
+    protected Component getLeftComponent(String id) {
+        return new Label(id, Model.of("Left"));
+    }
+    
+    protected Component getRightComponent(String id) {
+        return new Label(id, Model.of("Right"));
+    }
 }
