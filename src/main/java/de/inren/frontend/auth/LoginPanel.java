@@ -28,9 +28,12 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.util.value.ValueMap;
 
+import de.inren.frontend.application.ApplicationSettingsUtil;
 import de.inren.frontend.common.panel.ABasePanel;
 
 /**
+ * Login the user an apply his settings.
+ * 
  * @author Ingo Renner
  * 
  */
@@ -55,11 +58,12 @@ public class LoginPanel extends ABasePanel {
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                 if (getB4WebSession().signIn(signInForm.getEmail(), signInForm.getPassword())) {
+                    ApplicationSettingsUtil.applySettings(getB4WebSession().getUserSettings());
+                    
                     continueToOriginalDestination();
                     setResponsePage(getApplication().getHomePage());
                 } else {
                     form.error(new StringResourceModel("signInFailed", LoginPanel.this, null).getString());
-                    //target.add(getPage().getfgetFeedbackMessages());
                 }
             }
 

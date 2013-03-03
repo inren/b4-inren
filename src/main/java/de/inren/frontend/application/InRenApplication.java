@@ -21,6 +21,8 @@ import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.Set;
 
+import lombok.extern.slf4j.Slf4j;
+
 import org.apache.wicket.Component;
 import org.apache.wicket.Localizer;
 import org.apache.wicket.Page;
@@ -28,14 +30,16 @@ import org.apache.wicket.Session;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.protocol.http.WebApplication;
+import org.apache.wicket.protocol.http.request.WebClientInfo;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.Response;
+import org.apache.wicket.request.cycle.AbstractRequestCycleListener;
+import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
 import org.apache.wicket.util.visit.IVisit;
 import org.apache.wicket.util.visit.IVisitor;
-import org.wicketstuff.annotation.scan.AnnotatedMountScanner;
 
 import de.agilecoders.wicket.Bootstrap;
 import de.agilecoders.wicket.markup.html.RenderJavaScriptToFooterHeaderResponseDecorator;
@@ -55,6 +59,7 @@ import de.inren.frontend.common.session.B4WebSession;
  * @author Ingo Renner
  * 
  */
+@Slf4j
 public class InRenApplication extends WebApplication implements IB4Application {
 
     public InRenApplication() {
@@ -83,8 +88,22 @@ public class InRenApplication extends WebApplication implements IB4Application {
         /* Bootstrap */
         configureBootstrap();
 
-        new AnnotatedMountScanner().scanPackage("org.bricket.b4.*.wicket").mount(this);
+        // new AnnotatedMountScanner().scanPackage("org.bricket.b4.*.wicket").mount(this);
 
+        getRequestCycleListeners().add(new AbstractRequestCycleListener(){
+            
+            @Override
+            public void onBeginRequest(RequestCycle cycle) {
+                WebClientInfo ci = new WebClientInfo(cycle);                
+                log.debug("Request info: " + ci.getProperties().getRemoteAddress() 
+                        + ", " 
+                        + cycle.getRequest().getUrl()
+                        + ", " 
+                        + ci.getUserAgent()
+                    );
+           }
+        });
+        
         Localizer localizer = new Localizer() {
 
             @Override
@@ -180,5 +199,5 @@ public class InRenApplication extends WebApplication implements IB4Application {
             }
         }
     }
-
+    
 }

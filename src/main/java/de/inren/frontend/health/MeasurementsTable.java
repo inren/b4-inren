@@ -12,6 +12,7 @@ import org.apache.wicket.extensions.markup.html.repeater.data.table.export.Expor
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.bricket.b4.core.service.B4ServiceException;
 import org.bricket.b4.health.entity.Measurement;
 import org.bricket.b4.health.repository.MeasurementRepository;
 import org.bricket.b4.health.service.MeasurementService;
@@ -68,7 +69,12 @@ public class MeasurementsTable extends Panel {
 		m.setFat(i + 20);
 		m.setWater(i + 40);
 		m.setWeight(i + 60);
-		measurementService.saveMeasurement(m);
+		try {
+            measurementService.saveMeasurement(m);
+        } catch (B4ServiceException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 	    }
 	}
     }

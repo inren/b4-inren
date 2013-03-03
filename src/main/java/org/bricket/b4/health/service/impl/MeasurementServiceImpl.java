@@ -5,7 +5,10 @@ import java.util.Calendar;
 import java.util.Iterator;
 import java.util.List;
 
+import lombok.extern.slf4j.Slf4j;
+
 import org.apache.wicket.extensions.markup.html.repeater.data.table.ISortableDataProvider;
+import org.bricket.b4.core.service.B4ServiceException;
 import org.bricket.b4.health.entity.Measurement;
 import org.bricket.b4.health.repository.MeasurementRepository;
 import org.bricket.b4.health.service.MeasurementService;
@@ -21,18 +24,24 @@ import de.inren.frontend.common.dataprovider.RepositoryDataProvider;
  */
 @Service
 @Transactional(readOnly = true)
+@Slf4j
 public class MeasurementServiceImpl implements MeasurementService {
 
     @Autowired
     private MeasurementRepository measurementRepository;
 
     @Override
-    public Measurement saveMeasurement(Measurement measurement) {
-	if (measurement.getId() == null) {
-	    measurement.setDate(Calendar.getInstance().getTime());
-	}
-	measurementRepository.save(measurement);
-	return measurement;
+    public Measurement saveMeasurement(Measurement measurement) throws B4ServiceException {
+        try {
+            if (measurement.getId() == null) {
+                measurement.setDate(Calendar.getInstance().getTime());
+            }
+            measurementRepository.save(measurement);
+            return measurement;
+        } catch (Exception e) {
+            log.error("error saving measurement: " + measurement, e);
+            throw new B4ServiceException("MeasurementService", e);
+        }
     }
 
     @Override

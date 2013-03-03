@@ -58,10 +58,10 @@ public class AuthenticationServiceImpl extends B4ServiceImpl implements Authenti
     private final Logger log = LoggerFactory.getLogger(AuthenticationServiceImpl.class);
         
     @Resource
-    UserRepository userRepository;
+    private UserRepository userRepository;
 
     @Resource
-    RoleRepository roleRepository;
+    private RoleRepository roleRepository;
 
     @Autowired
     @Qualifier("authenticationManager")
@@ -117,7 +117,7 @@ public class AuthenticationServiceImpl extends B4ServiceImpl implements Authenti
                             AuthenticationServiceException.AUTHENTICATION_SERVICE_SIGNUP_FAILED, e);
                 }
             } else {
-                // activateUser(u);
+                activateUser(u);
             }
         } catch (B4ServiceException e) {
             throw new AuthenticationServiceException(

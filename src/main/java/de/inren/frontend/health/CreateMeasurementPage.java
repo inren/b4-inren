@@ -1,7 +1,7 @@
 package de.inren.frontend.health;
 
 import org.apache.wicket.Component;
-import org.apache.wicket.model.Model;
+import org.apache.wicket.markup.html.basic.Label;
 import org.bricket.b4.health.entity.Measurement;
 import org.wicketstuff.annotation.mount.MountPath;
 
@@ -20,8 +20,7 @@ public class CreateMeasurementPage extends DefaultPage<Measurement> {
 
     @Override
     public Component createPanel(String wicketId) {
-	return new EditOrCreateMeasurementPanel(wicketId,
-		new Model<Measurement>(null));
+	return new Label(wicketId, "TODO: CreateMeasurementPanel");
     }
 
 }

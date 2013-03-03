@@ -14,27 +14,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.inren.frontend.user;
+package org.bricket.b4.usersettings.service;
 
-import org.apache.wicket.Component;
-import org.bricket.b4.securityinren.entity.User;
-import org.wicketstuff.annotation.mount.MountPath;
-
-import de.inren.frontend.common.panel.WorktopPanel;
-import de.inren.frontend.common.templates.SecuredPage;
+import org.bricket.b4.core.service.B4Service;
+import org.bricket.b4.core.service.B4ServiceException;
+import org.bricket.b4.usersettings.entity.UserSettings;
 
 /**
  * @author Ingo Renner
  *
  */
-@MountPath(value = "/users")
-public class ManageUsersPage extends SecuredPage<User> {
+public interface UserSettingsService extends B4Service {
 
-    @Override
-    public Component createPanel(String wicketId) {
-        final WorktopPanel w = new WorktopPanel (wicketId);
-        w.setDelegate(new UserWorktopManageDelegate(w));
-        return w;
-    }
-
+    UserSettings load(long id);
+    
+    UserSettings loadByUser(Long uid) throws B4ServiceException;
+    
+    UserSettings save(UserSettings userSettings) throws B4ServiceException;
+    
+    void deleteUserSettings(UserSettings userSettings);
+    
 }

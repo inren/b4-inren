@@ -14,27 +14,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.inren.frontend.user;
+package de.inren.frontend.navigation;
 
-import org.apache.wicket.Component;
-import org.bricket.b4.securityinren.entity.User;
-import org.wicketstuff.annotation.mount.MountPath;
+import java.io.Serializable;
+import java.util.List;
 
-import de.inren.frontend.common.panel.WorktopPanel;
-import de.inren.frontend.common.templates.SecuredPage;
+import lombok.Data;
+
+import org.apache.wicket.Page;
+
+import de.agilecoders.wicket.markup.html.bootstrap.navbar.Navbar.ComponentPosition;
 
 /**
  * @author Ingo Renner
  *
  */
-@MountPath(value = "/users")
-public class ManageUsersPage extends SecuredPage<User> {
 
-    @Override
-    public Component createPanel(String wicketId) {
-        final WorktopPanel w = new WorktopPanel (wicketId);
-        w.setDelegate(new UserWorktopManageDelegate(w));
-        return w;
-    }
+@Data
+public class NavigationElement implements Serializable {
 
+    private final Class<? extends Page> clazz;
+    
+    private final String languageKey;
+    
+    private final List<String> roles;
+    
+    private final ComponentPosition position;
 }

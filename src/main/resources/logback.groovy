@@ -12,6 +12,8 @@ appender("RootConsoleAppender", ConsoleAppender) {
 
 logger("org.bricket.b4", DEBUG)
 
+logger("de.inren", DEBUG)
+
 // logger("org.apache.wicket", DEBUG)
 
 root(ERROR, ["RootConsoleAppender"])

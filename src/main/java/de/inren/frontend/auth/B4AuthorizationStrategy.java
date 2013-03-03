@@ -24,7 +24,7 @@ import org.apache.wicket.authorization.IAuthorizationStrategy;
 import org.apache.wicket.request.component.IRequestableComponent;
 
 import de.inren.frontend.common.session.B4WebSession;
-import de.inren.frontend.common.templates.B4Secured;
+import de.inren.frontend.common.templates.ISecured;
 
 /**
  * @author Ingo Renner
@@ -36,7 +36,7 @@ public class B4AuthorizationStrategy implements IAuthorizationStrategy {
     public <T extends IRequestableComponent> boolean isInstantiationAuthorized(Class<T> componentClass) {
         
         // Allow all non secured components
-        if (!B4Secured.class.isAssignableFrom(componentClass)) {
+        if (!ISecured.class.isAssignableFrom(componentClass)) {
             return true;             
         }
 

@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.inren.frontend.user;
+package de.inren.frontend.health;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -25,9 +25,9 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.bricket.b4.securityinren.entity.User;
-import org.bricket.b4.securityinren.repository.UserRepository;
-import org.bricket.b4.securityinren.service.UserService;
+import org.bricket.b4.health.entity.Measurement;
+import org.bricket.b4.health.repository.MeasurementRepository;
+import org.bricket.b4.health.service.MeasurementService;
 
 import de.agilecoders.wicket.markup.html.bootstrap.button.ButtonGroup;
 import de.agilecoders.wicket.markup.html.bootstrap.button.ButtonSize;
@@ -43,18 +43,19 @@ import de.inren.frontend.common.table.AjaxFallbackDefaultDataTableBuilder;
 
 /**
  * @author Ingo Renner
+ *
  */
-public class ManageUsersPanel extends ManagePanel implements IAdminPanel {
-    
-    @SpringBean
-    private UserService userService;
-    
-    @SpringBean
-    private UserRepository userRepository;
-    
-    private IWorktopManageDelegate<User> delegate;
+public class ManageMeasurementsPanel extends ManagePanel implements IAdminPanel {
 
-    public ManageUsersPanel(String id, IWorktopManageDelegate<User> delegate) {
+    @SpringBean
+    private MeasurementService measurementService;
+    
+    @SpringBean
+    private MeasurementRepository measurementRepository;
+    
+    private IWorktopManageDelegate<Measurement> delegate;
+
+    public ManageMeasurementsPanel(String id, IWorktopManageDelegate<Measurement> delegate) {
         super(id);
         this.delegate = delegate;
     }
@@ -62,22 +63,21 @@ public class ManageUsersPanel extends ManagePanel implements IAdminPanel {
     @SuppressWarnings("unchecked")
     @Override
     protected final Component getTable(final String id) {
-        AjaxFallbackDefaultDataTableBuilder<User> builder = new AjaxFallbackDefaultDataTableBuilder<User>(ManageUsersPanel.this);
+        AjaxFallbackDefaultDataTableBuilder<Measurement> builder = new AjaxFallbackDefaultDataTableBuilder<Measurement>(ManageMeasurementsPanel.this);
          
-        Component table =  builder.addDataProvider(new RepositoryDataProvider<User>(userRepository))
-                .add(new AbstractColumn<Object, Object>(new StringResourceModel("actions.label", ManageUsersPanel.this, null)) {
-
+        Component table =  builder.addDataProvider(new RepositoryDataProvider<Measurement>(measurementRepository))
+                .add(new AbstractColumn<Object, Object>(new StringResourceModel("actions.label", ManageMeasurementsPanel.this, null)) {
                     @Override
                     public void populateItem(Item<ICellPopulator<Object>> cellItem, String componentId, IModel<Object> rowModel) {
 
-                        final User user = (User) rowModel.getObject();
+                        final Measurement measurement = (Measurement) rowModel.getObject();
 
                         ButtonGroup bg = new ButtonGroup(componentId);
                         TypedAjaxLink<String> edit = new TypedAjaxLink<String>("button", ButtonType.Menu){
 
                             @Override
                             public void onClick(AjaxRequestTarget target) {
-                                delegate.switchToComponent(target, delegate.getEditPanel(new Model<User>(user)));
+                                delegate.switchToComponent(target, delegate.getEditPanel(new Model<Measurement>(measurement)));
                                 
                             }};
                             edit.setIconType(IconType.pencil);
@@ -85,39 +85,41 @@ public class ManageUsersPanel extends ManagePanel implements IAdminPanel {
                             edit.setInverted(false);
                             bg.addButton(edit);
                             
-                            // only delete other users
-                            if (!getUser().getUsername().equals(user.getEmail())) {
-                                TypedAjaxLink<String> delete = new TypedAjaxLink<String>("button", ButtonType.Menu){
+                            TypedAjaxLink<String> delete = new TypedAjaxLink<String>("button", ButtonType.Menu){
 
-                                    @Override
-                                    public void onClick(AjaxRequestTarget target) {
-                                        
-                                        try {
-                                            // feedback
-                                            getSession().getFeedbackMessages().clear();
-                                            target.add(getFeedback());
-                                            // delete
-                                            userRepository.delete(user.getId());
-                                            // manage
-                                            Component table = getTable(id);
-                                            ManageUsersPanel.this.addOrReplace(table);
-                                            target.add(table);
-                                        } catch (Exception e) {
-                                            error(e.getMessage());
-                                            target.add(getFeedback());
-                                        }
+                                @Override
+                                public void onClick(AjaxRequestTarget target) {
+                                    
+                                    try {
+                                        // feedback
+                                        getSession().getFeedbackMessages().clear();
+                                        target.add(getFeedback());
+                                        // delete
+                                        measurementRepository.delete(measurement.getId());
+                                        // manage
+                                        Component table = getTable(id);
+                                        ManageMeasurementsPanel.this.addOrReplace(table);
+                                        target.add(table);
+                                    } catch (Exception e) {
+                                        error(e.getMessage());
+                                        target.add(getFeedback());
                                     }
-                                };
-                                delete.setIconType(IconType.trash);
-                                delete.setSize(ButtonSize.Mini);
-                                delete.setInverted(false);
-                                bg.addButton(delete);
-                            }
+                                }
+                            };
+                            delete.setIconType(IconType.trash);
+                            delete.setSize(ButtonSize.Mini);
+                            delete.setInverted(false);
+                            bg.addButton(delete);
+                            
+                            // bg.add(new ToolbarBehavior());
                             cellItem.add(bg);
                     }
-                }).addPropertyColumn("id", true).addPropertyColumn("email", true).addPropertyColumn("firstname", true)
-                .addPropertyColumn("lastname", true).addBooleanPropertyColumn("enabled", true)
-                .addPropertyColumn("activationKey", true).setNumberOfRows(10).build(id);
+                }).addPropertyColumn("id", true)
+                .addPropertyColumn("weight", true)
+                .addPropertyColumn("fat", true)
+                .addPropertyColumn("water", true)
+                .setNumberOfRows(10)
+                .build(id);
         TableBehavior tableBehavior = new TableBehavior().bordered().condensed();
         table.add(tableBehavior);
         return table;
@@ -126,7 +128,7 @@ public class ManageUsersPanel extends ManagePanel implements IAdminPanel {
     @Override
     protected Component getActionPanel(String id) {
 
-        StringResourceModel srm = new StringResourceModel("actions.create.user", ManageUsersPanel.this, null);
+        StringResourceModel srm = new StringResourceModel("actions.create.measurement", ManageMeasurementsPanel.this, null);
         ButtonGroup bg = new ButtonGroup(id);
         TypedAjaxLink<String> create = new TypedAjaxLink<String>("button", srm, ButtonType.Primary){
 
@@ -136,8 +138,6 @@ public class ManageUsersPanel extends ManagePanel implements IAdminPanel {
             }};
             create.setIconType(IconType.plussign);
         bg.addButton(create);
-        
         return bg;
     }
-    
 }

@@ -33,8 +33,8 @@ import org.bricket.b4.securityinren.entity.User;
 import org.bricket.b4.securityinren.repository.RoleRepository;
 import org.bricket.b4.securityinren.repository.UserRepository;
 import org.bricket.b4.securityinren.service.RoleService;
-import org.bricket.b4.securityinren.service.UserService;
 import org.bricket.b4.securityinren.service.RoleService.Roles;
+import org.bricket.b4.securityinren.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -202,5 +202,4 @@ public class UserServiceImpl extends B4ServiceImpl implements UserService, UserD
     public User loadUserByEmailAndActivationKey(String email, String activationKey) {
         return userRepository.findByEmailAndActivationKey(email, activationKey);
     }
-
 }

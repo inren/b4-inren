@@ -14,27 +14,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.inren.frontend.user;
+package de.inren.frontend.usersettings;
 
 import org.apache.wicket.Component;
-import org.bricket.b4.securityinren.entity.User;
+import org.bricket.b4.usersettings.entity.UserSettings;
 import org.wicketstuff.annotation.mount.MountPath;
 
-import de.inren.frontend.common.panel.WorktopPanel;
 import de.inren.frontend.common.templates.SecuredPage;
 
 /**
  * @author Ingo Renner
  *
  */
-@MountPath(value = "/users")
-public class ManageUsersPage extends SecuredPage<User> {
+@MountPath(value = "/usersettings")
+public class UserSettingsPage extends SecuredPage<UserSettings> {
 
     @Override
     public Component createPanel(String wicketId) {
-        final WorktopPanel w = new WorktopPanel (wicketId);
-        w.setDelegate(new UserWorktopManageDelegate(w));
-        return w;
+        return new EditOrCreateUserSettingsPanel(wicketId);
     }
-
 }

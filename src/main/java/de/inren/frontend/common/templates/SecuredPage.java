@@ -10,7 +10,7 @@ import org.apache.wicket.markup.html.basic.Label;
  * @param <T>
  */
 
-public class SecuredPage<T> extends TemplatePage<T> implements B4Secured{
+public class SecuredPage<T> extends TemplatePage<T> implements ISecured{
 
     private final static String WICKET_ID = "panel";
 

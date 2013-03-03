@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import org.apache.wicket.extensions.markup.html.repeater.data.table.ISortableDataProvider;
+import org.bricket.b4.core.service.B4ServiceException;
 import org.bricket.b4.health.entity.Measurement;
 
 /**
@@ -12,7 +13,7 @@ import org.bricket.b4.health.entity.Measurement;
  */
 public interface MeasurementService extends Serializable {
 
-    Measurement saveMeasurement(Measurement measurement);
+    Measurement saveMeasurement(Measurement measurement) throws B4ServiceException;
 
     List<Measurement> findAll();
 

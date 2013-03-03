@@ -14,12 +14,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.inren.frontend.common.templates;
+package de.inren.frontend.application;
+
+import org.apache.wicket.Application;
+import org.bricket.b4.usersettings.entity.UserSettings;
+
+import de.agilecoders.wicket.Bootstrap;
+import de.agilecoders.wicket.settings.IBootstrapSettings;
 
 /**
+ * Single point to apply user settings.
+ * 
  * @author Ingo Renner
  *
  */
-public interface B4Secured {
+public class ApplicationSettingsUtil {
+    
+    /** Apply settings */
+    public static void applySettings(UserSettings u) {
+        
+        IBootstrapSettings settings = Bootstrap.getSettings(Application.get());
+        settings.getActiveThemeProvider().setActiveTheme(u.getTheme());
+    }
 
 }

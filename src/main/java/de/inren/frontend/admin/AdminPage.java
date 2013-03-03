@@ -14,27 +14,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.inren.frontend.user;
+package de.inren.frontend.admin;
 
 import org.apache.wicket.Component;
-import org.bricket.b4.securityinren.entity.User;
-import org.wicketstuff.annotation.mount.MountPath;
+import org.apache.wicket.markup.html.basic.Label;
 
-import de.inren.frontend.common.panel.WorktopPanel;
 import de.inren.frontend.common.templates.SecuredPage;
+
 
 /**
  * @author Ingo Renner
  *
  */
-@MountPath(value = "/users")
-public class ManageUsersPage extends SecuredPage<User> {
+public class AdminPage extends SecuredPage {
 
-    @Override
     public Component createPanel(String wicketId) {
-        final WorktopPanel w = new WorktopPanel (wicketId);
-        w.setDelegate(new UserWorktopManageDelegate(w));
-        return w;
+        return new Label(wicketId, "Choose action from left menu.");
     }
 
 }

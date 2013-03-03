@@ -25,11 +25,12 @@ import org.apache.wicket.request.Request;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.bricket.b4.authentication.service.AuthenticationService;
 import org.bricket.b4.core.service.B4ServiceException;
+import org.bricket.b4.securityinren.service.impl.UserDetailsImpl;
+import org.bricket.b4.usersettings.entity.UserSettings;
+import org.bricket.b4.usersettings.service.UserSettingsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 
 //import org.apache.wicket.authentication.AuthenticatedWebSession;
@@ -44,10 +45,19 @@ public class B4WebSession extends WebSession {
     @SpringBean
     private AuthenticationService authenticationService;
 
+    @SpringBean
+    private UserSettingsService userSettingsService;
+    
     /** True when the user is signed in */
     private volatile boolean signedIn = false;
 
     private UserDetails user;
+
+    private UserSettings userSettings;
+    
+    public UserSettings getUserSettings() {
+        return userSettings;
+    }
 
     public B4WebSession(Request request) {
         super(request);
@@ -56,7 +66,10 @@ public class B4WebSession extends WebSession {
 
     public boolean authenticate(String username, String password) {
         try {
-            this.user = authenticationService.authenticateUser(username, password);
+            user = authenticationService.authenticateUser(username, password);
+            
+            userSettings = userSettingsService.loadByUser(((UserDetailsImpl) user).getUid());
+            
             return true;
         } catch (B4ServiceException e) {
             log.error("authentication failed", e);
@@ -67,14 +80,14 @@ public class B4WebSession extends WebSession {
     public Collection<String> getRoles() {
         Collection<String> roles = new ArrayList<String>();
         if (isSignedIn()) {
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            if (authentication == null) {
-                log.error("Unexpected: Authentication not found. No roles granted. SecurityContext=" + SecurityContextHolder.getContext().toString());
-            } else {
-                for (GrantedAuthority authority : authentication.getAuthorities()) {
-                    roles.add(authority.getAuthority());
-                }
+            for (GrantedAuthority authority : user.getAuthorities()) {
+                roles.add(authority.getAuthority());
             }
+//            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//            if (authentication == null) {
+//                log.error("Unexpected: Authentication not found. No roles granted. SecurityContext=" + SecurityContextHolder.getContext().toString());
+//            } else {
+//            }
         }
         return roles;
     }
@@ -116,6 +129,8 @@ public class B4WebSession extends WebSession {
     @Override
     public void invalidate() {
         signOut();
+        userSettings = null;
+        user = null;
         super.invalidate();
     }
 
