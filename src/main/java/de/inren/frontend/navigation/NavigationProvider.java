@@ -34,6 +34,7 @@ import de.agilecoders.wicket.markup.html.bootstrap.navbar.NavbarButton;
 import de.inren.frontend.admin.AdminPage;
 import de.inren.frontend.application.HomePage;
 import de.inren.frontend.auth.LoginPage;
+import de.inren.frontend.health.HealthSettingsPage;
 import de.inren.frontend.health.ManageMeasurementsPage;
 import de.inren.frontend.role.ManageRolesPage;
 import de.inren.frontend.user.ManageUsersPage;
@@ -145,7 +146,12 @@ public class NavigationProvider {
         // static hack to speed up development for other places
         GNode<NavigationElement> root = 
             new GNode<NavigationElement>(new NavigationElement(HomePage.class, "Home", Collections.<String> emptyList(), ComponentPosition.LEFT))
-                .addChild(new GNode<NavigationElement>(new NavigationElement(ManageMeasurementsPage.class, "Health", Arrays.asList(Roles.ROLE_USER.name(), Roles.ROLE_ADMIN.name()), ComponentPosition.LEFT)))
+                .addChild(new GNode<NavigationElement>(
+                            new NavigationElement(ManageMeasurementsPage.class, "Health", Arrays.asList(Roles.ROLE_USER.name(), Roles.ROLE_ADMIN.name()), ComponentPosition.LEFT), Arrays.asList(
+                                    new GNode<NavigationElement>(new NavigationElement(HealthSettingsPage.class, "Settings", Arrays.asList(Roles.ROLE_ADMIN.name()), ComponentPosition.LEFT))
+                                    )
+                                )
+                            )
                 .addChild(new GNode<NavigationElement>(
                             new NavigationElement(AdminPage.class, "Admin", Arrays.asList(Roles.ROLE_ADMIN.name()), ComponentPosition.RIGHT), Arrays.asList(
                                     new GNode<NavigationElement>(new NavigationElement(ManageUsersPage.class, "Users", Arrays.asList(Roles.ROLE_ADMIN.name()), ComponentPosition.LEFT)),

@@ -24,6 +24,7 @@ import java.util.List;
 import org.apache.wicket.extensions.markup.html.repeater.util.SortableDataProvider;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
@@ -44,7 +45,6 @@ public class RepositoryDataProvider <T extends Serializable> extends SortableDat
     public RepositoryDataProvider(PagingAndSortingRepository<T, ? extends Serializable> repository) {
         super();
         this.repository = repository;
-
     }
 
     @Override
@@ -64,8 +64,12 @@ public class RepositoryDataProvider <T extends Serializable> extends SortableDat
             pageable = new PageRequest((int)page, (int)count, getSort().isAscending() ? Direction.ASC : Direction.DESC, getSort().getProperty());
         }
         List<T> res = new ArrayList<>();
-        res.addAll(repository.findAll(pageable).getContent());
+        res.addAll(getPage(pageable).getContent());
         return res.iterator();
+    }
+
+    protected Page<T> getPage(final Pageable pageable) {
+        return repository.findAll(pageable);
     }
 
     @Override

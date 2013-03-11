@@ -98,7 +98,6 @@ public class TemplatePage<T> extends GenericWebPage<T> {
         add(new Footer("footer"));
 
         add(getLeftComponent("left"));
-        add(getRightComponent("right"));
         
         add(new FeedbackPanel("feedbackPanel").setOutputMarkupId(true));
 
@@ -175,9 +174,5 @@ public class TemplatePage<T> extends GenericWebPage<T> {
         } else {
             return new NavList(id, menu);
         }
-    }
-    
-    protected Component getRightComponent(String id) {
-        return new Label(id, Model.of("Right"));
     }
 }

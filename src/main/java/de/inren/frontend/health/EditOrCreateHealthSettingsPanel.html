@@ -1,0 +1,30 @@
+<html xmlns:wicket>
+<wicket:panel>
+	<form wicket:id="form" class="form-horizontal">
+		<div class="control-group">
+			<label class="control-label" for="birthday" wicket:id="birthday.label">[birthday]</label>
+			<div class="controls">
+			   	<input wicket:id="birthday" name="birthday" class="text" />
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label" for="height" wicket:id="height.label">[height]</label>
+			<div class="controls">
+			   	<input wicket:id="height" type="text" name="height" class="text" />
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label" for="male" wicket:id="gender.label">[gender]</label>
+			<div class="controls">
+			   	<span wicket:id="male"></span>
+			</div>
+		</div>
+		<div class="control-group">
+			<div class="controls">
+				<button class="btn" wicket:id="submit"><wicket:message key="submit.label">[submit]</wicket:message></button>
+				<button class="btn" wicket:id="cancel"><wicket:message key="cancel.label">[cancel]</wicket:message></button>
+			</div>
+		</div>
+	</form>
+</wicket:panel>
+</html>

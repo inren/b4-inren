@@ -28,6 +28,9 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.bricket.b4.health.entity.Measurement;
 import org.bricket.b4.health.repository.MeasurementRepository;
 import org.bricket.b4.health.service.MeasurementService;
+import org.bricket.b4.securityinren.service.impl.UserDetailsImpl;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import de.agilecoders.wicket.markup.html.bootstrap.button.ButtonGroup;
 import de.agilecoders.wicket.markup.html.bootstrap.button.ButtonSize;
@@ -65,7 +68,19 @@ public class ManageMeasurementsPanel extends ManagePanel implements IAdminPanel 
     protected final Component getTable(final String id) {
         AjaxFallbackDefaultDataTableBuilder<Measurement> builder = new AjaxFallbackDefaultDataTableBuilder<Measurement>(ManageMeasurementsPanel.this);
          
-        Component table =  builder.addDataProvider(new RepositoryDataProvider<Measurement>(measurementRepository))
+        Component table =  builder.addDataProvider(new RepositoryDataProvider<Measurement>(measurementRepository){
+
+            @Override
+            protected Page<Measurement> getPage(Pageable pageable) {
+                return measurementRepository.findByUid(((UserDetailsImpl) getUser()).getUid(), pageable);
+            }
+
+            @Override
+            public long size() {
+                return measurementRepository.findByUid(((UserDetailsImpl) getUser()).getUid()).size();
+            }
+            
+        })
                 .add(new AbstractColumn<Object, Object>(new StringResourceModel("actions.label", ManageMeasurementsPanel.this, null)) {
                     @Override
                     public void populateItem(Item<ICellPopulator<Object>> cellItem, String componentId, IModel<Object> rowModel) {
@@ -115,6 +130,7 @@ public class ManageMeasurementsPanel extends ManagePanel implements IAdminPanel 
                             cellItem.add(bg);
                     }
                 }).addPropertyColumn("id", true)
+                .addPropertyColumn("uid", true)
                 .addPropertyColumn("weight", true)
                 .addPropertyColumn("fat", true)
                 .addPropertyColumn("water", true)

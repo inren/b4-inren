@@ -4,6 +4,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.wicketstuff.annotation.mount.MountPath;
 
+import de.inren.frontend.codeflower.CodeFlowerPanel;
 import de.inren.frontend.common.templates.TemplatePage;
 
 /**
@@ -14,6 +15,7 @@ import de.inren.frontend.common.templates.TemplatePage;
 
 @MountPath(value = "/h", alt = "/home")
 public class HomePage<T> extends TemplatePage<T> {
+
     public HomePage(IModel<T> model) {
         super(model);
     }
@@ -23,6 +25,7 @@ public class HomePage<T> extends TemplatePage<T> {
     }
 
     public HomePage() {
-	//super();
+	add( new CodeFlowerPanel("flowers"));
     }
+    
 }

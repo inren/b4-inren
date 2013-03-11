@@ -74,7 +74,7 @@ public class UserSettingsServiceImpl extends B4ServiceImpl implements UserSettin
     @Override
     public UserSettings save(UserSettings userSettings) throws B4ServiceException {
         try {
-        return userSettingsRepository.save(userSettings);
+            return userSettingsRepository.save(userSettings);
         } catch (Exception e) {
             log.error("error saving userSettings: " + userSettings, e);
             throw new B4ServiceException("UserSettingsService", e);

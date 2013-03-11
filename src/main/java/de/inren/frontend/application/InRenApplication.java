@@ -27,6 +27,8 @@ import org.apache.wicket.Component;
 import org.apache.wicket.Localizer;
 import org.apache.wicket.Page;
 import org.apache.wicket.Session;
+import org.apache.wicket.markup.html.IPackageResourceGuard;
+import org.apache.wicket.markup.html.SecurePackageResourceGuard;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.protocol.http.WebApplication;
@@ -53,6 +55,7 @@ import de.agilecoders.wicket.settings.BootstrapSettings;
 import de.agilecoders.wicket.settings.BootswatchThemeProvider;
 import de.agilecoders.wicket.settings.ThemeProvider;
 import de.inren.frontend.auth.B4AuthorizationStrategy;
+import de.inren.frontend.common.dns.DnsUtil;
 import de.inren.frontend.common.session.B4WebSession;
 
 /**
@@ -90,15 +93,21 @@ public class InRenApplication extends WebApplication implements IB4Application {
 
         // new AnnotatedMountScanner().scanPackage("org.bricket.b4.*.wicket").mount(this);
 
-        getRequestCycleListeners().add(new AbstractRequestCycleListener(){
+        // TODO gehört ins codeflower package. => Init für Wicket module/packages machen.
+        final IPackageResourceGuard packageResourceGuard = getResourceSettings().getPackageResourceGuard();
+        if (packageResourceGuard instanceof SecurePackageResourceGuard) {
+            ((SecurePackageResourceGuard) packageResourceGuard).addPattern("+*.json");
+        }
+        
+        getRequestCycleListeners().add(new AbstractRequestCycleListener() {
             
             @Override
             public void onBeginRequest(RequestCycle cycle) {
                 WebClientInfo ci = new WebClientInfo(cycle);                
-                log.debug("Request info: " + ci.getProperties().getRemoteAddress() 
-                        + ", " 
-                        + cycle.getRequest().getUrl()
-                        + ", " 
+                log.debug("Request info: " 
+                        + ci.getProperties().getRemoteAddress() + ", "
+                        + ("".equals(DnsUtil.lookup(ci.getProperties().getRemoteAddress())) ? "" : DnsUtil.lookup(ci.getProperties().getRemoteAddress()) + ", ")
+                        + (cycle.getRequest().getUrl().getPath()==null || "".equals(cycle.getRequest().getUrl().getPath()) ? "" : cycle.getRequest().getUrl().getPath() + ", ") 
                         + ci.getUserAgent()
                     );
            }
@@ -117,8 +126,10 @@ public class InRenApplication extends WebApplication implements IB4Application {
             }
 
         };
-
         this.getResourceSettings().setLocalizer(localizer);
+        
+        this.getMarkupSettings().setStripWicketTags(true);
+        this.getMarkupSettings().setStripComments(true);
     }
 
     @Override
