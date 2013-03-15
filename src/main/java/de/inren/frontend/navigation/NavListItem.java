@@ -21,8 +21,8 @@ import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
-import de.agilecoders.wicket.markup.html.bootstrap.button.ButtonType;
-import de.agilecoders.wicket.markup.html.bootstrap.button.TypedBookmarkablePageLink;
+import de.agilecoders.wicket.markup.html.bootstrap.button.BootstrapBookmarkablePageLink;
+import de.agilecoders.wicket.markup.html.bootstrap.button.Buttons;
 import de.agilecoders.wicket.markup.html.bootstrap.image.IconType;
 import de.agilecoders.wicket.util.Components;
 
@@ -30,7 +30,7 @@ import de.agilecoders.wicket.util.Components;
  * @author Ingo Renner
  *
  */
-public class NavListItem<T> extends TypedBookmarkablePageLink<T> {
+public class NavListItem<T> extends BootstrapBookmarkablePageLink<T> {
 
     /**
      * Constructor.
@@ -41,7 +41,7 @@ public class NavListItem<T> extends TypedBookmarkablePageLink<T> {
      * @param <T>        type of the page class
      */
     public <T extends Page> NavListItem(String id, final Class<T> pageClass, final PageParameters parameters, final IModel<String> label) {
-        super(id, pageClass, parameters, ButtonType.Menu);
+        super(id, pageClass, parameters, Buttons.Type.Menu);
 
         setLabel(label);
     }

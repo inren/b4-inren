@@ -16,10 +16,14 @@
  */
 package de.inren.frontend.health;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.AbstractColumn;
+import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -32,10 +36,9 @@ import org.bricket.b4.securityinren.service.impl.UserDetailsImpl;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import de.agilecoders.wicket.markup.html.bootstrap.button.BootstrapAjaxLink;
 import de.agilecoders.wicket.markup.html.bootstrap.button.ButtonGroup;
-import de.agilecoders.wicket.markup.html.bootstrap.button.ButtonSize;
-import de.agilecoders.wicket.markup.html.bootstrap.button.ButtonType;
-import de.agilecoders.wicket.markup.html.bootstrap.button.TypedAjaxLink;
+import de.agilecoders.wicket.markup.html.bootstrap.button.Buttons;
 import de.agilecoders.wicket.markup.html.bootstrap.image.IconType;
 import de.agilecoders.wicket.markup.html.bootstrap.table.TableBehavior;
 import de.inren.frontend.common.dataprovider.RepositoryDataProvider;
@@ -87,44 +90,53 @@ public class ManageMeasurementsPanel extends ManagePanel implements IAdminPanel 
 
                         final Measurement measurement = (Measurement) rowModel.getObject();
 
-                        ButtonGroup bg = new ButtonGroup(componentId);
-                        TypedAjaxLink<String> edit = new TypedAjaxLink<String>("button", ButtonType.Menu){
+                        ButtonGroup bg = new ButtonGroup(componentId){
 
                             @Override
-                            public void onClick(AjaxRequestTarget target) {
-                                delegate.switchToComponent(target, delegate.getEditPanel(new Model<Measurement>(measurement)));
-                                
-                            }};
-                            edit.setIconType(IconType.pencil);
-                            edit.setSize(ButtonSize.Mini);
-                            edit.setInverted(false);
-                            bg.addButton(edit);
-                            
-                            TypedAjaxLink<String> delete = new TypedAjaxLink<String>("button", ButtonType.Menu){
-
-                                @Override
-                                public void onClick(AjaxRequestTarget target) {
+                            protected List<AbstractLink> newButtons(String buttonMarkupId) {
+                                List<AbstractLink> res = new ArrayList<AbstractLink>();
+                                BootstrapAjaxLink<String> edit = new BootstrapAjaxLink<String>("button", Buttons.Type.Menu){
                                     
-                                    try {
-                                        // feedback
-                                        getSession().getFeedbackMessages().clear();
-                                        target.add(getFeedback());
-                                        // delete
-                                        measurementRepository.delete(measurement.getId());
-                                        // manage
-                                        Component table = getTable(id);
-                                        ManageMeasurementsPanel.this.addOrReplace(table);
-                                        target.add(table);
-                                    } catch (Exception e) {
-                                        error(e.getMessage());
-                                        target.add(getFeedback());
+                                    @Override
+                                    public void onClick(AjaxRequestTarget target) {
+                                        delegate.switchToComponent(target, delegate.getEditPanel(new Model<Measurement>(measurement)));
+                                        
                                     }
-                                }
-                            };
-                            delete.setIconType(IconType.trash);
-                            delete.setSize(ButtonSize.Mini);
-                            delete.setInverted(false);
-                            bg.addButton(delete);
+                                };
+                                edit.setIconType(IconType.pencil);
+                                edit.setSize(Buttons.Size.Mini);
+                                edit.setInverted(false);
+                                res.add(edit);
+                                
+                                BootstrapAjaxLink<String> delete = new BootstrapAjaxLink<String>("button", Buttons.Type.Menu){
+                                    
+                                    @Override
+                                    public void onClick(AjaxRequestTarget target) {
+                                        
+                                        try {
+                                            // feedback
+                                            getSession().getFeedbackMessages().clear();
+                                            target.add(getFeedback());
+                                            // delete
+                                            measurementRepository.delete(measurement.getId());
+                                            // manage
+                                            Component table = getTable(id);
+                                            ManageMeasurementsPanel.this.addOrReplace(table);
+                                            target.add(table);
+                                        } catch (Exception e) {
+                                            error(e.getMessage());
+                                            target.add(getFeedback());
+                                        }
+                                    }
+                                };
+                                delete.setIconType(IconType.trash);
+                                delete.setSize(Buttons.Size.Mini);
+                                delete.setInverted(false);
+                                res.add(delete);
+                                return res;
+                            }
+                        };
+                            
                             
                             // bg.add(new ToolbarBehavior());
                             cellItem.add(bg);
@@ -144,16 +156,23 @@ public class ManageMeasurementsPanel extends ManagePanel implements IAdminPanel 
     @Override
     protected Component getActionPanel(String id) {
 
-        StringResourceModel srm = new StringResourceModel("actions.create.measurement", ManageMeasurementsPanel.this, null);
-        ButtonGroup bg = new ButtonGroup(id);
-        TypedAjaxLink<String> create = new TypedAjaxLink<String>("button", srm, ButtonType.Primary){
+        ButtonGroup bg = new ButtonGroup(id){
 
             @Override
-            public void onClick(AjaxRequestTarget target) {
-                delegate.switchToComponent(target, delegate.getEditPanel(null));
-            }};
-            create.setIconType(IconType.plussign);
-        bg.addButton(create);
+            protected List<AbstractLink> newButtons(String buttonMarkupId) {
+                List<AbstractLink> res = new ArrayList<AbstractLink>();
+                StringResourceModel srm = new StringResourceModel("actions.create.measurement", ManageMeasurementsPanel.this, null);
+                BootstrapAjaxLink<String> create = new BootstrapAjaxLink<String>("button", srm, Buttons.Type.Primary){
+                    
+                    @Override
+                    public void onClick(AjaxRequestTarget target) {
+                        delegate.switchToComponent(target, delegate.getEditPanel(null));
+                    }};
+                    create.setIconType(IconType.plussign);
+                    res.add(create);
+                return res;
+            }
+            };
         return bg;
     }
 }

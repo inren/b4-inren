@@ -44,12 +44,17 @@ import org.apache.wicket.util.visit.IVisit;
 import org.apache.wicket.util.visit.IVisitor;
 
 import de.agilecoders.wicket.Bootstrap;
+import de.agilecoders.wicket.BootstrapLess;
+import de.agilecoders.wicket.less.BootstrapLessCompilerSettings;
+import de.agilecoders.wicket.less.IBootstrapLessCompilerSettings;
+import de.agilecoders.wicket.less.Less4JCompiler;
 import de.agilecoders.wicket.markup.html.RenderJavaScriptToFooterHeaderResponseDecorator;
 import de.agilecoders.wicket.markup.html.bootstrap.extensions.html5player.Html5PlayerCssReference;
 import de.agilecoders.wicket.markup.html.bootstrap.extensions.html5player.Html5PlayerJavaScriptReference;
 import de.agilecoders.wicket.markup.html.bootstrap.extensions.jqueryui.JQueryUIJavaScriptReference;
 import de.agilecoders.wicket.markup.html.references.BootstrapPrettifyCssReference;
 import de.agilecoders.wicket.markup.html.references.ModernizrJavaScriptReference;
+import de.agilecoders.wicket.markup.html.themes.google.GoogleTheme;
 import de.agilecoders.wicket.markup.html.themes.metro.MetroTheme;
 import de.agilecoders.wicket.settings.BootstrapSettings;
 import de.agilecoders.wicket.settings.BootswatchThemeProvider;
@@ -138,20 +143,24 @@ public class InRenApplication extends WebApplication implements IB4Application {
     }
 
     private void configureBootstrap() {
-        BootstrapSettings settings = new BootstrapSettings();
-        settings.minify(true)
-        // use minimized version of all bootstrap references
-        .useJqueryPP(true).useModernizr(true).useResponsiveCss(true)
-        .setJsResourceFilterName("footer-container")
-        .getBootstrapLessCompilerSettings().setUseLessCompiler(false);
-
-        ThemeProvider themeProvider = new BootswatchThemeProvider() {
+        final BootstrapSettings settings = new BootstrapSettings();
+        final ThemeProvider themeProvider = new BootswatchThemeProvider() {
             {
                 add(new MetroTheme());
+                add(new GoogleTheme());
                 defaultTheme("cyborg");
             }
         };
         settings.setThemeProvider(themeProvider);
+        settings.setJsResourceFilterName("footer-container")
+                .setThemeProvider(themeProvider);
+        Bootstrap.install(this, settings);
+
+        final IBootstrapLessCompilerSettings lessCompilerSettings = new BootstrapLessCompilerSettings();
+        lessCompilerSettings.setUseLessCompiler(usesDevelopmentConfig())
+                .setLessCompiler(new Less4JCompiler());
+        BootstrapLess.install(this, lessCompilerSettings);
+
 
         Bootstrap.install(this, settings);
         configureResourceBundles();
@@ -187,10 +196,11 @@ public class InRenApplication extends WebApplication implements IB4Application {
                 InRenApplication.class,
                 "application.css",
                 (CssResourceReference) Bootstrap.getSettings()
-                .getResponsiveCssResourceReference(),
+                .getCssResourceReference(),
                 (CssResourceReference) BootstrapPrettifyCssReference.INSTANCE
                 );
     }
+    
 
     @Override
     public FeedbackPanel getFeedbackPanel(Page page) {

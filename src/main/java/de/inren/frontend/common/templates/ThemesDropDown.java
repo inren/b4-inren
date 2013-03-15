@@ -16,10 +16,12 @@
  */
 package de.inren.frontend.common.templates;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.Page;
+import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
@@ -28,7 +30,6 @@ import de.agilecoders.wicket.markup.html.bootstrap.button.dropdown.MenuBookmarka
 import de.agilecoders.wicket.markup.html.bootstrap.button.dropdown.MenuDivider;
 import de.agilecoders.wicket.markup.html.bootstrap.button.dropdown.MenuHeader;
 import de.agilecoders.wicket.markup.html.bootstrap.extensions.button.DropDownAutoOpen;
-import de.agilecoders.wicket.markup.html.bootstrap.image.IconType;
 import de.agilecoders.wicket.markup.html.bootstrap.navbar.NavbarDropDownButton;
 import de.agilecoders.wicket.settings.IBootstrapSettings;
 import de.agilecoders.wicket.settings.ITheme;
@@ -58,18 +59,24 @@ public class ThemesDropDown extends NavbarDropDownButton {
 
     private void initGui() {
         add(new DropDownAutoOpen());
-        addButton(new MenuHeader(Model.of("all available themes:")));
-        addButton(new MenuDivider()).setIconType(IconType.book);
-        IBootstrapSettings settings = Bootstrap.getSettings(getApplication());
-        List<ITheme> themes = settings.getThemeProvider().available();
-
-        for (ITheme theme : themes) {
-            PageParameters params = new PageParameters();
-            params.set("theme", theme.name());
-            addButton(new MenuBookmarkablePageLink<Page>(getPage().getPageClass(), params, Model.of(theme.name())));
-        }
-        
     }
 
-    
+    @Override
+    protected List<AbstractLink> newSubMenuButtons(final String buttonMarkupId) {
+        final List<AbstractLink> subMenu = new ArrayList<AbstractLink>();
+        subMenu.add(new MenuHeader(Model.of("all available themes:")));
+        subMenu.add(new MenuDivider());
+
+        final IBootstrapSettings settings = Bootstrap.getSettings(getApplication());
+        final List<ITheme> themes = settings.getThemeProvider().available();
+
+        for (final ITheme theme : themes) {
+            PageParameters params = new PageParameters();
+            params.set("theme", theme.name());
+
+            subMenu.add(new MenuBookmarkablePageLink<Page>(getPage().getPageClass(), params, Model.of(theme.name())));
+        }
+
+        return subMenu;
+    }
 }

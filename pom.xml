@@ -76,11 +76,11 @@
 		<spring-security-oauth.version>1.0.0.RELEASE</spring-security-oauth.version>
 		<spring-data-jpa.version>1.2.0.RELEASE</spring-data-jpa.version>
 		<!-- Wicket core -->
-		<wicket.version>6.5.0</wicket.version>
+		<wicket.version>6.6.0</wicket.version>
 		<!-- Add your project specific versions here -->
 		<wicket-dashboard.version>0.6-SNAPSHOT</wicket-dashboard.version>		
 		<wicketstuff.version.version>6.2.1</wicketstuff.version.version>
-		<bootstrap.version>0.7.6</bootstrap.version>
+		<bootstrap.version>0.8.0</bootstrap.version>
 	</properties>
 
 	<dependencies>
@@ -318,13 +318,8 @@
 		
 		<!-- Bootstrap -->
 		<dependency>
-		    <groupId>de.agilecoders.wicket</groupId>
-		    <artifactId>bootstrap</artifactId>
-		    <version>${bootstrap.version}</version>
-		</dependency>
-        <dependency>
-            <groupId>de.agilecoders.wicket</groupId>
-            <artifactId>bootstrap-extensions</artifactId>
+		  <groupId>de.agilecoders.wicket</groupId>
+		  <artifactId>wicket-bootstrap-core</artifactId>
 		    <version>${bootstrap.version}</version>
 		    <exclusions>
 		    	<exclusion>
@@ -332,8 +327,40 @@
 		    		<groupId>log4j</groupId>
 		    	</exclusion>
 		    </exclusions>
-        </dependency>
-		
+		</dependency>
+		<dependency>
+			<groupId>de.agilecoders.wicket</groupId>
+			<artifactId>wicket-bootstrap-extensions</artifactId>
+		    <version>${bootstrap.version}</version>
+		    <exclusions>
+		    	<exclusion>
+		    		<artifactId>log4j</artifactId>
+		    		<groupId>log4j</groupId>
+		    	</exclusion>
+		    </exclusions>
+		</dependency>
+		<dependency>
+			<groupId>de.agilecoders.wicket</groupId>
+			<artifactId>wicket-bootstrap-themes</artifactId>
+		    <version>${bootstrap.version}</version>
+		    <exclusions>
+		    	<exclusion>
+		    		<artifactId>log4j</artifactId>
+		    		<groupId>log4j</groupId>
+		    	</exclusion>
+		    </exclusions>
+		</dependency>		
+		<dependency>
+		  <groupId>de.agilecoders.wicket</groupId>
+		  <artifactId>wicket-bootstrap-less</artifactId>
+		    <version>${bootstrap.version}</version>
+		    <exclusions>
+		    	<exclusion>
+		    		<artifactId>log4j</artifactId>
+		    		<groupId>log4j</groupId>
+		    	</exclusion>
+		    </exclusions>
+		</dependency>		
 			<!-- java mail -->
 			<dependency>
 				<groupId>javax.mail</groupId>

@@ -16,10 +16,14 @@
  */
 package de.inren.frontend.user;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.AbstractColumn;
+import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -27,12 +31,10 @@ import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.bricket.b4.securityinren.entity.User;
 import org.bricket.b4.securityinren.repository.UserRepository;
-import org.bricket.b4.securityinren.service.UserService;
 
+import de.agilecoders.wicket.markup.html.bootstrap.button.BootstrapAjaxLink;
 import de.agilecoders.wicket.markup.html.bootstrap.button.ButtonGroup;
-import de.agilecoders.wicket.markup.html.bootstrap.button.ButtonSize;
-import de.agilecoders.wicket.markup.html.bootstrap.button.ButtonType;
-import de.agilecoders.wicket.markup.html.bootstrap.button.TypedAjaxLink;
+import de.agilecoders.wicket.markup.html.bootstrap.button.Buttons;
 import de.agilecoders.wicket.markup.html.bootstrap.image.IconType;
 import de.agilecoders.wicket.markup.html.bootstrap.table.TableBehavior;
 import de.inren.frontend.common.dataprovider.RepositoryDataProvider;
@@ -45,9 +47,6 @@ import de.inren.frontend.common.table.AjaxFallbackDefaultDataTableBuilder;
  * @author Ingo Renner
  */
 public class ManageUsersPanel extends ManagePanel implements IAdminPanel {
-    
-    @SpringBean
-    private UserService userService;
     
     @SpringBean
     private UserRepository userRepository;
@@ -72,48 +71,57 @@ public class ManageUsersPanel extends ManagePanel implements IAdminPanel {
 
                         final User user = (User) rowModel.getObject();
 
-                        ButtonGroup bg = new ButtonGroup(componentId);
-                        TypedAjaxLink<String> edit = new TypedAjaxLink<String>("button", ButtonType.Menu){
+                        ButtonGroup bg = new ButtonGroup(componentId){
 
                             @Override
-                            public void onClick(AjaxRequestTarget target) {
-                                delegate.switchToComponent(target, delegate.getEditPanel(new Model<User>(user)));
+                            protected List<AbstractLink> newButtons(String buttonMarkupId) {
+                                List<AbstractLink> res = new ArrayList<AbstractLink>();
                                 
-                            }};
-                            edit.setIconType(IconType.pencil);
-                            edit.setSize(ButtonSize.Mini);
-                            edit.setInverted(false);
-                            bg.addButton(edit);
-                            
-                            // only delete other users
-                            if (!getUser().getUsername().equals(user.getEmail())) {
-                                TypedAjaxLink<String> delete = new TypedAjaxLink<String>("button", ButtonType.Menu){
-
+                                BootstrapAjaxLink<String> edit = new BootstrapAjaxLink<String>("button", Buttons.Type.Menu){
+                                    
                                     @Override
                                     public void onClick(AjaxRequestTarget target) {
+                                        delegate.switchToComponent(target, delegate.getEditPanel(new Model<User>(user)));
                                         
-                                        try {
-                                            // feedback
-                                            getSession().getFeedbackMessages().clear();
-                                            target.add(getFeedback());
-                                            // delete
-                                            userRepository.delete(user.getId());
-                                            // manage
-                                            Component table = getTable(id);
-                                            ManageUsersPanel.this.addOrReplace(table);
-                                            target.add(table);
-                                        } catch (Exception e) {
-                                            error(e.getMessage());
-                                            target.add(getFeedback());
-                                        }
                                     }
                                 };
-                                delete.setIconType(IconType.trash);
-                                delete.setSize(ButtonSize.Mini);
-                                delete.setInverted(false);
-                                bg.addButton(delete);
-                            }
-                            cellItem.add(bg);
+                                edit.setIconType(IconType.pencil);
+                                edit.setSize(Buttons.Size.Mini);
+                                edit.setInverted(false);
+                                res.add(edit);
+
+                                // only delete other users
+                                if (!getUser().getUsername().equals(user.getEmail())) {
+                                    BootstrapAjaxLink<String> delete = new BootstrapAjaxLink<String>("button", Buttons.Type.Menu){
+
+                                        @Override
+                                        public void onClick(AjaxRequestTarget target) {
+                                            
+                                            try {
+                                                // feedback
+                                                getSession().getFeedbackMessages().clear();
+                                                target.add(getFeedback());
+                                                // delete
+                                                userRepository.delete(user.getId());
+                                                // manage
+                                                Component table = getTable(id);
+                                                ManageUsersPanel.this.addOrReplace(table);
+                                                target.add(table);
+                                            } catch (Exception e) {
+                                                error(e.getMessage());
+                                                target.add(getFeedback());
+                                            }
+                                        }
+                                    };
+                                    delete.setIconType(IconType.trash);
+                                    delete.setSize(Buttons.Size.Mini);
+                                    delete.setInverted(false);
+                                    res.add(delete);
+                                }
+                                return res;
+                            };
+                        };
+                        cellItem.add(bg);
                     }
                 }).addPropertyColumn("id", true).addPropertyColumn("email", true).addPropertyColumn("firstname", true)
                 .addPropertyColumn("lastname", true).addBooleanPropertyColumn("enabled", true)
@@ -126,16 +134,24 @@ public class ManageUsersPanel extends ManagePanel implements IAdminPanel {
     @Override
     protected Component getActionPanel(String id) {
 
-        StringResourceModel srm = new StringResourceModel("actions.create.user", ManageUsersPanel.this, null);
-        ButtonGroup bg = new ButtonGroup(id);
-        TypedAjaxLink<String> create = new TypedAjaxLink<String>("button", srm, ButtonType.Primary){
+        ButtonGroup bg = new ButtonGroup(id){
 
             @Override
-            public void onClick(AjaxRequestTarget target) {
-                delegate.switchToComponent(target, delegate.getEditPanel(null));
-            }};
-            create.setIconType(IconType.plussign);
-        bg.addButton(create);
+            protected List<AbstractLink> newButtons(String buttonMarkupId) {
+                List<AbstractLink> res = new ArrayList<AbstractLink>();
+                StringResourceModel srm = new StringResourceModel("actions.create.user", ManageUsersPanel.this, null);
+                BootstrapAjaxLink<String> create = new BootstrapAjaxLink<String>("button", srm, Buttons.Type.Primary){
+                    
+                    @Override
+                    public void onClick(AjaxRequestTarget target) {
+                        delegate.switchToComponent(target, delegate.getEditPanel(null));
+                    }
+                };
+                create.setIconType(IconType.plussign);
+                res.add(create);
+                return res;
+            }
+        };
         
         return bg;
     }
