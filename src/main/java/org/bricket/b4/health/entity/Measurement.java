@@ -32,11 +32,20 @@ public class Measurement implements Serializable {
 	private Date date;
 
 	@Column(name = "weight")
-	private long weight;
+	private double weight;
+
+        @Column(name = "weightDelta")
+        private double weightDelta;
 
 	@Column(name = "fat")
-	private long fat;
+	private double fat;
+
+        @Column(name = "fatDelta")
+        private double fatDelta;
 
 	@Column(name = "water")
-	private long water;
+	private double water;
+
+	@Column(name = "waterDelta")
+        private double waterDelta;
 }

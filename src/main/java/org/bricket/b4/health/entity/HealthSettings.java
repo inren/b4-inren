@@ -45,7 +45,7 @@ public class HealthSettings extends DomainObject {
     private Long uid;
 
     @Column(name = "height")
-    private long height;
+    private Double height;
 
     @Column(name = "birthday")
     private Date birthday;

@@ -16,6 +16,8 @@
  */
 package de.inren.frontend.common.panel;
 
+import lombok.extern.slf4j.Slf4j;
+
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
@@ -33,6 +35,7 @@ import de.inren.frontend.common.session.B4WebSession;
  * @author Ingo Renner
  * @author Henning Teek
  */
+@Slf4j
 public abstract class ABasePanel extends Panel {
     
     private FeedbackPanel feedback;
@@ -48,8 +51,15 @@ public abstract class ABasePanel extends Panel {
     @Override
     protected void onConfigure() {
         super.onConfigure();
-        this.feedback = getApplication() instanceof IB4Application ? ((IB4Application) getApplication())
-                .getFeedbackPanel(getPage()) : null;
+        try {
+            this.feedback = getApplication() instanceof IB4Application ? ((IB4Application) getApplication())
+                    .getFeedbackPanel(getPage()) : null;
+            
+        } catch (Exception e) {
+            log.error("Application Class = " + getApplication().getClass().getName());
+            log.error("Page Class        = " + getPage().getClass().getName());
+            log.error(e.getMessage(), e);
+        }
     }
 
     @Override

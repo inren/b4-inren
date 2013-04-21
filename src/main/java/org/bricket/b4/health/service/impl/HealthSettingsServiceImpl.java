@@ -16,6 +16,9 @@
  */
 package org.bricket.b4.health.service.impl;
 
+import java.util.Calendar;
+import java.util.List;
+
 import javax.annotation.Resource;
 
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +28,9 @@ import org.bricket.b4.core.service.B4ServiceImpl;
 import org.bricket.b4.health.entity.HealthSettings;
 import org.bricket.b4.health.repository.HealthSettingsRepository;
 import org.bricket.b4.health.service.HealthSettingsService;
+import org.bricket.b4.securityinren.entity.User;
+import org.bricket.b4.securityinren.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,14 +42,30 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 @Slf4j
 public class HealthSettingsServiceImpl extends B4ServiceImpl implements HealthSettingsService {
+    @Autowired
+    UserService userService;
 
     @Resource
     HealthSettingsRepository healthSettingsRepository;
 
     @Override
     protected void onInit() throws B4ServiceException {
-        log.info("Health settings service initialized");
-    }
+        userService.init();
+            if (healthSettingsRepository.count() == 0L) {
+                List<User> users = userService.loadAllUser();
+                for (User u : users) {
+                    HealthSettings s = new HealthSettings();
+                    s.setUid(u.getId());
+                    s.setMale(true);
+                    s.setHeight(1.89);
+                    Calendar cal = Calendar.getInstance();
+                    cal.set(1969, 02, 22);
+                    s.setBirthday(cal.getTime());
+                    healthSettingsRepository.save(s);
+                }
+            }
+            log.info("Health settings service initialized");
+        };
 
     @Override
     public HealthSettings load(long id) {

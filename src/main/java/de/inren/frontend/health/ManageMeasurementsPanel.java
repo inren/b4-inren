@@ -143,10 +143,14 @@ public class ManageMeasurementsPanel extends ManagePanel implements IAdminPanel 
                     }
                 }).addPropertyColumn("id", true)
                 .addPropertyColumn("uid", true)
-                .addPropertyColumn("weight", true)
-                .addPropertyColumn("fat", true)
-                .addPropertyColumn("water", true)
+//                .addPropertyColumn("weight", true)
+//                .addPropertyColumn("fat", true)
+//                .addPropertyColumn("water", true)
+                .add(new HealthColumn<Measurement>(new Model<String>("weight"), "weight", "weight"))
+                .add(new HealthColumn<Measurement>(new Model<String>("fat"), "fat", "fat"))
+                .add(new HealthColumn<Measurement>(new Model<String>("water"), "water","water"))
                 .setNumberOfRows(10)
+                
                 .build(id);
         TableBehavior tableBehavior = new TableBehavior().bordered().condensed();
         table.add(tableBehavior);

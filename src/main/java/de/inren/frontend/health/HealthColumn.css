@@ -1,0 +1,11 @@
+.health-less {
+	color: green;
+}
+
+.health-same {
+	color: yellow;
+}
+
+.health-more {
+	color: red;
+}

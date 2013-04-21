@@ -23,6 +23,7 @@ import java.util.List;
 
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
+import org.bricket.b4.health.entity.HealthSettings;
 import org.bricket.b4.health.entity.Measurement;
 import org.bricket.b4.health.repository.MeasurementRepository;
 
@@ -32,7 +33,7 @@ import de.inren.frontend.jqplot.IJqplotDefinition;
  * @author Ingo Renner
  *
  */
-public class HealthJqplotDefinition implements IJqplotDefinition {
+public class BmiJqplotDefinition implements IJqplotDefinition {
 
     private class Entry {
         private final String x;
@@ -58,8 +59,11 @@ public class HealthJqplotDefinition implements IJqplotDefinition {
     
     private List<Entry> entries;
     
-    public HealthJqplotDefinition(MeasurementRepository measurementRepository, String fieldname, long uid) {
+    private HealthSettings healthSettings;
+    
+    public BmiJqplotDefinition(MeasurementRepository measurementRepository, HealthSettings s, String fieldname, long uid) {
         this.measurementRepository = measurementRepository;
+        this.healthSettings = s;
         this.fieldname = fieldname;
         this.uid = uid;
         
@@ -68,8 +72,9 @@ public class HealthJqplotDefinition implements IJqplotDefinition {
         SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd");
         
         for (Measurement m : d) {
-            IModel pm = new PropertyModel(m, fieldname);
-            entries.add(new Entry(sd.format(m.getDate()), String.valueOf(pm.getObject())));
+            IModel<Double> pm = new PropertyModel<Double>(m, fieldname);
+            Double mass = pm.getObject();
+            entries.add(new Entry(sd.format(m.getDate()), String.valueOf(HealthCalculator.calculateBmi(healthSettings.getHeight(), mass))));
         }
     }
 

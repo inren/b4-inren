@@ -34,12 +34,15 @@ import de.agilecoders.wicket.markup.html.bootstrap.navbar.NavbarButton;
 import de.inren.frontend.admin.AdminPage;
 import de.inren.frontend.application.HomePage;
 import de.inren.frontend.auth.LoginPage;
+import de.inren.frontend.health.BmiWikiPage;
 import de.inren.frontend.health.HealthChartPage;
 import de.inren.frontend.health.HealthSettingsPage;
 import de.inren.frontend.health.ManageMeasurementsPage;
 import de.inren.frontend.role.ManageRolesPage;
 import de.inren.frontend.user.ManageUsersPage;
 import de.inren.frontend.usersettings.UserSettingsPage;
+import de.inren.frontend.wicketstuff.Gmap3Page;
+import de.inren.frontend.wicketstuff.Lightbox2Page;
 
 /**
  * 
@@ -52,6 +55,8 @@ import de.inren.frontend.usersettings.UserSettingsPage;
  */
 @Slf4j
 public class NavigationProvider {
+
+    private static final List<String> EMPTY_LIST = Collections.<String> emptyList();
 
     private static NavigationProvider navigationProvider;
     
@@ -143,14 +148,23 @@ public class NavigationProvider {
     private void initNavigation() {
         
         // TODO read this data from an editable source like db or xml file.
+        List<String> healthRoles = Arrays.asList(Roles.ROLE_USER.name(), Roles.ROLE_ADMIN.name());
         
         // static hack to speed up development for other places
         GNode<NavigationElement> root = 
-            new GNode<NavigationElement>(new NavigationElement(HomePage.class, "Home", Collections.<String> emptyList(), ComponentPosition.LEFT))
+            new GNode<NavigationElement>(new NavigationElement(HomePage.class, "Home", EMPTY_LIST, ComponentPosition.LEFT))
                 .addChild(new GNode<NavigationElement>(
-                            new NavigationElement(ManageMeasurementsPage.class, "Health", Arrays.asList(Roles.ROLE_USER.name(), Roles.ROLE_ADMIN.name()), ComponentPosition.LEFT), Arrays.asList(
-                                    new GNode<NavigationElement>(new NavigationElement(HealthSettingsPage.class, "Settings", Arrays.asList(Roles.ROLE_ADMIN.name()), ComponentPosition.LEFT)),
-                                    new GNode<NavigationElement>(new NavigationElement(HealthChartPage.class, "Chart", Arrays.asList(Roles.ROLE_ADMIN.name()), ComponentPosition.LEFT))
+                            new NavigationElement(Lightbox2Page.class, "WicketStuff", EMPTY_LIST, ComponentPosition.LEFT), Arrays.asList(
+                                    new GNode<NavigationElement>(new NavigationElement(Lightbox2Page.class, "Lightbox2", EMPTY_LIST, ComponentPosition.LEFT)),
+                                    new GNode<NavigationElement>(new NavigationElement(Gmap3Page.class, "Gmap3", EMPTY_LIST, ComponentPosition.LEFT))
+                                    )
+                                )
+                            )
+                .addChild(new GNode<NavigationElement>(
+                            new NavigationElement(ManageMeasurementsPage.class, "Health", healthRoles, ComponentPosition.LEFT), Arrays.asList(
+                                    new GNode<NavigationElement>(new NavigationElement(HealthChartPage.class, "Chart", healthRoles, ComponentPosition.LEFT)),
+                                    new GNode<NavigationElement>(new NavigationElement(BmiWikiPage.class, "BMI", healthRoles, ComponentPosition.LEFT)),
+                                    new GNode<NavigationElement>(new NavigationElement(HealthSettingsPage.class, "Settings", Arrays.asList(Roles.ROLE_ADMIN.name()), ComponentPosition.LEFT))
                                     )
                                 )
                             )

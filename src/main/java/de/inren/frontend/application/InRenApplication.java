@@ -16,10 +16,8 @@
  */
 package de.inren.frontend.application;
 
-import java.util.HashSet;
 import java.util.Locale;
 import java.util.MissingResourceException;
-import java.util.Set;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -40,8 +38,6 @@ import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
-import org.apache.wicket.util.visit.IVisit;
-import org.apache.wicket.util.visit.IVisitor;
 
 import de.agilecoders.wicket.Bootstrap;
 import de.agilecoders.wicket.BootstrapLess;
@@ -142,6 +138,7 @@ public class InRenApplication extends WebApplication implements IB4Application {
         return new B4WebSession(request);
     }
 
+    
     private void configureBootstrap() {
         final BootstrapSettings settings = new BootstrapSettings();
         final ThemeProvider themeProvider = new BootswatchThemeProvider() {
@@ -205,20 +202,6 @@ public class InRenApplication extends WebApplication implements IB4Application {
     @Override
     public FeedbackPanel getFeedbackPanel(Page page) {
         return (FeedbackPanel) page.visitChildren(new FeedbackPanelVisitor());
-    }
-
-    private static final class FeedbackPanelVisitor implements IVisitor<Component, Component> {
-        private final Set<Component> visited = new HashSet<Component>();
-
-        @Override
-        public void component(Component component, IVisit<Component> visit) {
-            if (!visited.contains(component)) {
-                visited.add(component);
-                if (component instanceof FeedbackPanel) {
-                    visit.stop(component);
-                }
-            }
-        }
     }
     
 }

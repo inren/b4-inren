@@ -20,7 +20,10 @@ import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.bricket.b4.core.service.B4ServiceException;
+import org.bricket.b4.health.entity.HealthSettings;
 import org.bricket.b4.health.repository.MeasurementRepository;
+import org.bricket.b4.health.service.HealthSettingsService;
 import org.wicketstuff.annotation.mount.MountPath;
 
 import de.inren.frontend.common.templates.SecuredPage;
@@ -31,10 +34,14 @@ import de.inren.frontend.jqplot.JqplotPanel;
  * @author Ingo Renner
  *
  */
-@MountPath(value = "/healthchart")
-public class HealthChartPage extends SecuredPage<IJqplotDefinition> {
+@MountPath(value = "/healthbmi")
+public class BmiWikiPage extends SecuredPage<IJqplotDefinition> {
+    
     @SpringBean
     private MeasurementRepository measurementRepository;
+    
+    @SpringBean
+    private HealthSettingsService healthSettingsService;
 
     @Override
     public Component createPanel(String wicketId) {
@@ -42,6 +49,12 @@ public class HealthChartPage extends SecuredPage<IJqplotDefinition> {
     }
 
     final IModel<IJqplotDefinition> createJqplotModel() {
-        return new Model<IJqplotDefinition>(new HealthJqplotDefinition(measurementRepository, "weight", 2));
+        HealthSettings s = new HealthSettings();
+        try {
+             s = healthSettingsService.loadByUser(2L);
+        } catch (B4ServiceException e) {
+            e.printStackTrace();
+        }
+        return new Model<IJqplotDefinition>(new BmiJqplotDefinition(measurementRepository, s, "weight", 2));
     }
 }
