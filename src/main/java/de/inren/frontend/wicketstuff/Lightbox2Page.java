@@ -19,9 +19,9 @@ public class Lightbox2Page<T> extends TemplatePage<T> {
         add(new LightboxLink("link", image).add(new Image("image", thumbnail)));
 
         // Image Set
-        add(new LightboxPanel("lightbox1", UrlUtils.rewriteToContextRelative("images/image-1.jpg", RequestCycle.get()), "images/thumb-1.jpg", "plant"));
-        add(new LightboxPanel("lightbox2", UrlUtils.rewriteToContextRelative("images/image-2.jpg", RequestCycle.get()), "images/thumb-2.jpg", "plant"));
-        add(new LightboxPanel("lightbox3", UrlUtils.rewriteToContextRelative("images/image-3.jpg", RequestCycle.get()), "images/thumb-3.jpg", "plant"));
+        add(new LightboxPanel("lightbox1", UrlUtils.rewriteToContextRelative("images/image-1.jpg", RequestCycle.get()), "images/thumb-1.jpg", "lightbox", "Spider", "Spider"));
+        add(new LightboxPanel("lightbox2", UrlUtils.rewriteToContextRelative("images/image-2.jpg", RequestCycle.get()), "images/thumb-2.jpg", "lightbox", "Some flowers", "Some flowers"));
+        add(new LightboxPanel("lightbox3", UrlUtils.rewriteToContextRelative("images/image-3.jpg", RequestCycle.get()), "images/thumb-3.jpg", "lightbox", "View from Lyon Hostel", "View from Lyon Hostel"));
     }
 
 }

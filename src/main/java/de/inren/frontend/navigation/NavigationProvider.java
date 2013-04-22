@@ -41,7 +41,10 @@ import de.inren.frontend.health.ManageMeasurementsPage;
 import de.inren.frontend.role.ManageRolesPage;
 import de.inren.frontend.user.ManageUsersPage;
 import de.inren.frontend.usersettings.UserSettingsPage;
+import de.inren.frontend.wicketstuff.EditableGridPage;
 import de.inren.frontend.wicketstuff.Gmap3Page;
+import de.inren.frontend.wicketstuff.InmethodGridPage;
+import de.inren.frontend.wicketstuff.JqPlotPage;
 import de.inren.frontend.wicketstuff.Lightbox2Page;
 
 /**
@@ -156,7 +159,10 @@ public class NavigationProvider {
                 .addChild(new GNode<NavigationElement>(
                             new NavigationElement(Lightbox2Page.class, "WicketStuff", EMPTY_LIST, ComponentPosition.LEFT), Arrays.asList(
                                     new GNode<NavigationElement>(new NavigationElement(Lightbox2Page.class, "Lightbox2", EMPTY_LIST, ComponentPosition.LEFT)),
-                                    new GNode<NavigationElement>(new NavigationElement(Gmap3Page.class, "Gmap3", EMPTY_LIST, ComponentPosition.LEFT))
+                                    new GNode<NavigationElement>(new NavigationElement(Gmap3Page.class, "Gmap3", EMPTY_LIST, ComponentPosition.LEFT)),
+                                    new GNode<NavigationElement>(new NavigationElement(InmethodGridPage.class, "Inmethod Grid", EMPTY_LIST, ComponentPosition.LEFT)),
+                                    new GNode<NavigationElement>(new NavigationElement(EditableGridPage.class, "Editable Grid", EMPTY_LIST, ComponentPosition.LEFT)),
+                                    new GNode<NavigationElement>(new NavigationElement(JqPlotPage.class, "JqPlot", EMPTY_LIST, ComponentPosition.LEFT))
                                     )
                                 )
                             )
