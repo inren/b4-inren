@@ -140,6 +140,10 @@ public class TemplatePage<T> extends GenericWebPage<T> {
     	return navbar;
     }
     
+    protected Long getUid() {
+        return ((B4WebSession) getSession()).getUserSettings().getUid();
+    }
+    
     private boolean isSignedIn() {
         return ((B4WebSession) getSession()).isSignedIn();
     }

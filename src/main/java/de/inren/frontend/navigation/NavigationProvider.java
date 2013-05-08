@@ -38,6 +38,8 @@ import de.inren.frontend.health.BmiWikiPage;
 import de.inren.frontend.health.HealthChartPage;
 import de.inren.frontend.health.HealthSettingsPage;
 import de.inren.frontend.health.ManageMeasurementsPage;
+import de.inren.frontend.health.PlotWeightPage;
+import de.inren.frontend.health.backup.BackupRestorePage;
 import de.inren.frontend.role.ManageRolesPage;
 import de.inren.frontend.user.ManageUsersPage;
 import de.inren.frontend.usersettings.UserSettingsPage;
@@ -169,7 +171,9 @@ public class NavigationProvider {
                 .addChild(new GNode<NavigationElement>(
                             new NavigationElement(ManageMeasurementsPage.class, "Health", healthRoles, ComponentPosition.LEFT), Arrays.asList(
                                     new GNode<NavigationElement>(new NavigationElement(HealthChartPage.class, "Chart", healthRoles, ComponentPosition.LEFT)),
+                                    new GNode<NavigationElement>(new NavigationElement(PlotWeightPage.class, "Chart 2", healthRoles, ComponentPosition.LEFT)),
                                     new GNode<NavigationElement>(new NavigationElement(BmiWikiPage.class, "BMI", healthRoles, ComponentPosition.LEFT)),
+                                    new GNode<NavigationElement>(new NavigationElement(BackupRestorePage.class, "Backup/Restore", healthRoles, ComponentPosition.LEFT)),
                                     new GNode<NavigationElement>(new NavigationElement(HealthSettingsPage.class, "Settings", Arrays.asList(Roles.ROLE_ADMIN.name()), ComponentPosition.LEFT))
                                     )
                                 )
