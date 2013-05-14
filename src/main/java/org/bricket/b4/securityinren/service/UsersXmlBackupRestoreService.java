@@ -14,30 +14,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.bricket.b4.health.service.impl;
+package org.bricket.b4.securityinren.service;
 
-import java.io.Serializable;
+import java.io.File;
 
-import lombok.Data;
+import org.bricket.b4.core.service.B4Service;
+import org.bricket.b4.core.service.B4ServiceException;
 
 /**
  * @author Ingo Renner
  *
  */
-@Data
-public class UidMapping implements  Serializable {
-    
-    private Long id;
-    
-    private String email;
-    
-    public UidMapping() {
-        super();
-    }
+public interface UsersXmlBackupRestoreService extends B4Service {
 
-    public UidMapping(Long id, String email) {
-        super();
-        this.id = id;
-        this.email = email;
-    }
+    String dumpDbToXml() throws B4ServiceException;
+    
+    void restoreFromXmlFile(File file) throws B4ServiceException;
+
 }

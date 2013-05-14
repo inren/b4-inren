@@ -45,7 +45,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Entity
 @Table(name = "inren_User", uniqueConstraints = @UniqueConstraint(columnNames = "email"))
 @Data
-@ToString(exclude = { "password" })
+@ToString(exclude = { "password" }, callSuper = true)
 @EqualsAndHashCode(callSuper = true, exclude = "groups")
 public class User extends DomainObject {
     

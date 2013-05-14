@@ -16,6 +16,9 @@
  */
 package org.bricket.b4.health.service;
 
+
+import java.io.File;
+
 import org.bricket.b4.core.service.B4Service;
 import org.bricket.b4.core.service.B4ServiceException;
 
@@ -29,9 +32,9 @@ import org.bricket.b4.core.service.B4ServiceException;
  */
 public interface HealthXmlBackupRestoreService extends B4Service {
     
-    String dumpDbToXml(String email) throws B4ServiceException;;
+    String dumpDbToXml(String email) throws B4ServiceException;
 
-    String dumpDbToXml() throws B4ServiceException;;
+    String dumpDbToXml() throws B4ServiceException;
 
-    void restoreFromXml(String xml) throws B4ServiceException;;
+    void restoreFromXmlFile(File file) throws B4ServiceException;
 }

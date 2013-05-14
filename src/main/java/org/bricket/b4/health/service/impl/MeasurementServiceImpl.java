@@ -42,30 +42,32 @@ public class MeasurementServiceImpl extends B4ServiceImpl implements Measurement
     @Override
     protected void onInit() throws B4ServiceException {
         userService.init();
-        if (measurementRepository.count() == 0L) {
-            List<User> users = userService.loadAllUser();
-            Random r = new Random();
-            for (User u : users) {
-                Calendar cal = Calendar.getInstance();
-                final int max = 200;
-                cal.add(Calendar.DAY_OF_YEAR, -max);
-                int fat = 30;
-                int water = 40;
-                int weight = 120;
-                
-                for (int i = 0; i < max; i++) {
-                    Measurement m = new Measurement();
-                    int pm = r.nextBoolean() ? 1 : -1;
-                    fat = fat + pm * r.nextInt(2);
-                    water = water + pm * r.nextInt(2);
-                    weight = weight + pm * r.nextInt(5);
-                    m.setUid(u.getId());
-                    cal.add(Calendar.DAY_OF_YEAR, 1);
-                    m.setDate(new Date(cal.getTime().getTime()));
-                    m.setFat(fat);
-                    m.setWater(water);
-                    m.setWeight(weight);
-                    saveMeasurement(m);
+        if (false) {
+            if (measurementRepository.count() == 0L) {
+                List<User> users = userService.loadAllUser();
+                Random r = new Random();
+                for (User u : users) {
+                    Calendar cal = Calendar.getInstance();
+                    final int max = 200;
+                    cal.add(Calendar.DAY_OF_YEAR, -max);
+                    int fat = 30;
+                    int water = 40;
+                    int weight = 120;
+
+                    for (int i = 0; i < max; i++) {
+                        Measurement m = new Measurement();
+                        int pm = r.nextBoolean() ? 1 : -1;
+                        fat = fat + pm * r.nextInt(2);
+                        water = water + pm * r.nextInt(2);
+                        weight = weight + pm * r.nextInt(5);
+                        m.setUid(u.getId());
+                        cal.add(Calendar.DAY_OF_YEAR, 1);
+                        m.setDate(new Date(cal.getTime().getTime()));
+                        m.setFat(fat);
+                        m.setWater(water);
+                        m.setWeight(weight);
+                        saveMeasurement(m);
+                    }
                 }
             }
         }

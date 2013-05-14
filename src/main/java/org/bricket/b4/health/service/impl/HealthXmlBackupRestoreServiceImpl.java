@@ -18,11 +18,12 @@ package org.bricket.b4.health.service.impl;
 
 import java.beans.XMLDecoder;
 import java.beans.XMLEncoder;
+import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.IOException;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +32,6 @@ import javax.annotation.Resource;
 
 import lombok.extern.slf4j.Slf4j;
 
-import org.apache.commons.io.FileUtils;
 import org.bricket.b4.core.service.B4ServiceException;
 import org.bricket.b4.core.service.B4ServiceImpl;
 import org.bricket.b4.health.entity.HealthSettings;
@@ -46,7 +46,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import de.inren.frontend.common.backuprestore.EndMarker;
+
 /**
+ * Service to backup and restore all health data into xml.
+ * 
  * @author Ingo Renner
  *
  */
@@ -54,11 +58,13 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 @Slf4j
 public class HealthXmlBackupRestoreServiceImpl extends B4ServiceImpl implements HealthXmlBackupRestoreService {
-    @Autowired
-    UserService userService;
+    private static final String INITIAL_HEALTH_SERVICE_DATA_XML = "initialHealthServiceData.xml";
 
     @Autowired
-    HealthSettingsService healthSettingsService;
+    private UserService userService;
+
+    @Autowired
+    private HealthSettingsService healthSettingsService;
     
     @Autowired
     private MeasurementRepository measurementRepository;
@@ -70,19 +76,8 @@ public class HealthXmlBackupRestoreServiceImpl extends B4ServiceImpl implements 
     protected void onInit() throws B4ServiceException {
         userService.init();
         healthSettingsService.init();
+        initDataBase();
         log.info("Health backup and restore service initialized");
-        String xml = dumpDbToXml("admin@localhost");
-        log.info("Dumping admin@localhost settings:\n" + xml);
-        try {
-            File file = new File("/tmp/inrenHealthDump.xml");
-            if (file.exists()) {
-                file.delete();
-            }
-            FileUtils.writeStringToFile(file, xml);
-        } catch (IOException e) {
-            log.error(e.getMessage(),e);
-        }
-        restoreFromXml("");
     }
     
     @Override
@@ -126,36 +121,71 @@ public class HealthXmlBackupRestoreServiceImpl extends B4ServiceImpl implements 
     }
 
     @Override
-    public void restoreFromXml(String xml) throws B4ServiceException {
-        File file = new File("/tmp/inrenHealthDump.xml");
-        if (!file.exists()) {
-            log.info("nothing to import");
-            return;
-        }
-        log.info("Testmode try to import from " + file.getAbsolutePath());
+    public void restoreFromXmlFile(File file) throws B4ServiceException {
+        // TODO Rechteprüfung
+        XMLDecoder d;
         try {
-            xml = FileUtils.readFileToString(file);
-        } catch (IOException e) {
-            log.error(e.getMessage(),e);
-            return;
+            d = new XMLDecoder(new BufferedInputStream(new FileInputStream(file)));
+        } catch (FileNotFoundException e) {
+            throw new B4ServiceException("restoreFromXmlFileFailed", e);
         }
-        ByteArrayInputStream bais = new ByteArrayInputStream(xml.getBytes());
-        XMLDecoder d = new XMLDecoder(bais);
         boolean finished = false;
+        Long currentId = null;
+        UidMapping currentMapping = null;
+        HealthSettings currentSettings = null;
+        Measurement currentMeasurement = null;
         do {
             try {
                 Object o = d.readObject();
-                log.info(o.toString());
+                log.info("readObject: " + o);
+                if (o instanceof UidMapping) {
+                    currentMapping = (UidMapping) o;
+                    User user = userService.loadUserByEmail(currentMapping.getEmail());
+                    currentId = user==null ? null : user.getId();
+                    if (currentId != null) {
+                        HealthSettings s = healthSettingsService.loadByUser(currentId);
+                        if (s != null) {
+                            healthSettingsService.deleteHealthSettings(s);
+                        }
+                        List<Measurement> ms = measurementRepository.findByUid(currentId);
+                        for (Measurement m : ms) {
+                            measurementRepository.delete(m);
+                        }
+                    } else {
+                        // TODO handle unknown user in mapping
+                    }
+                }
+                if (o instanceof HealthSettings && currentId!=null) {
+                    currentSettings = (HealthSettings) o;
+                    currentSettings.setUid(currentId);
+                    healthSettingsService.save(currentSettings);
+                }
+                if (o instanceof Measurement && currentId!=null) {
+                    currentMeasurement = (Measurement) o;
+                    currentMeasurement.setUid(currentId);
+                    measurementRepository.save(currentMeasurement);
+                }
                 if (o instanceof EndMarker) {
                     finished = true;
                 }
             } catch (Exception e) {
-                log.error(e.getMessage(),e);
-                finished = true;
+                log.error(e.getMessage(), e);
+                d.close();
+                throw new B4ServiceException("restoreFromXmlFileFailed", e);
             }
-            
         } while (!finished);
         d.close();
     }
-
+    
+    private void initDataBase() throws B4ServiceException {
+        if (healthSettingsRepository.count() == 0) {
+            File file = new File(getInitialConfigurationFolder(), INITIAL_HEALTH_SERVICE_DATA_XML);
+            if (file.exists()) {
+                log.info("HealthService is filled with initial data from: " + file.getAbsolutePath());
+                restoreFromXmlFile(file);
+            } else {
+                log.info("If you need to init your db with custom data, put it here: " + file.getAbsolutePath());
+            }
+        }
+    }
 }

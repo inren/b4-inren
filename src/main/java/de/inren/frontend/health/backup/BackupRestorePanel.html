@@ -1,7 +1,26 @@
 <html xmlns:wicket>
 <wicket:panel>
 	<h3>Backup and restore</h3>
-	<a wicket:id="userLink">User backup</a>
-	<a wicket:id="allLink">All User backup</a>
+    <fieldset>
+      <legend>Backup</legend>
+        <p>
+			<a wicket:id="userLink">Current user</a>
+		</p>
+		<p>
+			<a wicket:id="allLink">All users</a>
+		</p>
+	</fieldset>
+    <form wicket:id="restore">
+     <fieldset>
+      <legend>Restore</legend>
+        <p>
+        <label for="upload">Select one backup xml file</label>
+        <input wicket:id="fileInput" type="file"/>
+        </p>
+        <input type="submit" value="Restore"/>
+        <span wicket:id="progress">[[upload progressbar]]</span>
+     </fieldset>
+    </form>
+	
 </wicket:panel>
 </html>

@@ -23,6 +23,7 @@ import javax.persistence.UniqueConstraint;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import org.bricket.b4.core.entity.DomainObject;
 import org.hibernate.annotations.Cache;
@@ -38,6 +39,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Table(name = "usersettings", uniqueConstraints = @UniqueConstraint(columnNames = "uid"))
 @Data
 @EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
 public class UserSettings extends DomainObject {
 
     @Column(nullable = false)

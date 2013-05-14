@@ -14,30 +14,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.bricket.b4.health.service.impl;
+package de.inren.frontend.common.backuprestore;
 
 import java.io.Serializable;
 
-import lombok.Data;
-
 /**
+ * Tagging object for the xml dump in HealthXmlBackupRestoreService.
+ * 
  * @author Ingo Renner
  *
  */
-@Data
-public class UidMapping implements  Serializable {
-    
-    private Long id;
-    
-    private String email;
-    
-    public UidMapping() {
+public class EndMarker implements Serializable {
+
+    public EndMarker() {
         super();
     }
 
-    public UidMapping(Long id, String email) {
-        super();
-        this.id = id;
-        this.email = email;
+    @Override
+    public String toString() {
+        return "HealthXmlBackupRestoreService EndMarker";
     }
 }

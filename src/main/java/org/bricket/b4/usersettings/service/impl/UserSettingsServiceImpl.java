@@ -64,6 +64,11 @@ public class UserSettingsServiceImpl extends B4ServiceImpl implements UserSettin
     }
 
     private UserSettings createDefaultUserSettings(Long uid) throws B4ServiceException {
+        try {
+            Application.get();
+        } catch (Exception e) {
+            return null;
+        }
         UserSettings us = new UserSettings();
         us.setUid(uid);
         us.setTheme(Bootstrap.getSettings(Application.get()).getThemeProvider().defaultTheme().name());

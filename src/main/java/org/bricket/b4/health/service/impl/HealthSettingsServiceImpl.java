@@ -51,6 +51,7 @@ public class HealthSettingsServiceImpl extends B4ServiceImpl implements HealthSe
     @Override
     protected void onInit() throws B4ServiceException {
         userService.init();
+        if (false) {
             if (healthSettingsRepository.count() == 0L) {
                 List<User> users = userService.loadAllUser();
                 for (User u : users) {
@@ -64,8 +65,9 @@ public class HealthSettingsServiceImpl extends B4ServiceImpl implements HealthSe
                     healthSettingsRepository.save(s);
                 }
             }
-            log.info("Health settings service initialized");
-        };
+        }
+        log.info("Health settings service initialized");
+    };
 
     @Override
     public HealthSettings load(long id) {

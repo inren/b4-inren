@@ -16,9 +16,14 @@
  */
 package org.bricket.b4.core.service;
 
+import java.io.File;
+
 import javax.annotation.PostConstruct;
 
 public abstract class B4ServiceImpl implements B4Service {
+    
+    private static File initialConfigurationFolder = new File(System.getProperty("java.io.tmpdir"), "inren-dbinit");
+    
     private boolean initialized = false;
 
     @Override
@@ -30,6 +35,11 @@ public abstract class B4ServiceImpl implements B4Service {
         onInit();
         initialized = true;
     }
-
+    
     protected abstract void onInit() throws B4ServiceException;
+
+    public static File getInitialConfigurationFolder() {
+        return initialConfigurationFolder;
+    }
+
 }

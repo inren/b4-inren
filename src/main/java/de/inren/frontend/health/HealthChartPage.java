@@ -42,6 +42,6 @@ public class HealthChartPage extends SecuredPage<IJqplotDefinition> {
     }
 
     final IModel<IJqplotDefinition> createJqplotModel() {
-        return new Model<IJqplotDefinition>(new HealthJqplotDefinition(measurementRepository, "weight", 2));
+        return new Model<IJqplotDefinition>(new HealthJqplotDefinition(measurementRepository, "weight", getUid()));
     }
 }

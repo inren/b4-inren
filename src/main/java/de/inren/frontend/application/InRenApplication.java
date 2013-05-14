@@ -38,6 +38,7 @@ import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
+import org.apache.wicket.util.file.Folder;
 
 import de.agilecoders.wicket.Bootstrap;
 import de.agilecoders.wicket.BootstrapLess;
@@ -65,7 +66,9 @@ import de.inren.frontend.common.session.B4WebSession;
  */
 @Slf4j
 public class InRenApplication extends WebApplication implements IB4Application {
-
+    
+    private Folder uploadFolder = null;
+    
     public InRenApplication() {
     }
 
@@ -128,6 +131,11 @@ public class InRenApplication extends WebApplication implements IB4Application {
 
         };
         this.getResourceSettings().setLocalizer(localizer);
+        
+        uploadFolder = new Folder(System.getProperty("java.io.tmpdir"), "inren-uploads");
+        uploadFolder.mkdirs();
+        
+        getApplicationSettings().setUploadProgressUpdatesEnabled(true); 
         
         this.getMarkupSettings().setStripWicketTags(true);
         this.getMarkupSettings().setStripComments(true);
@@ -203,5 +211,11 @@ public class InRenApplication extends WebApplication implements IB4Application {
     public FeedbackPanel getFeedbackPanel(Page page) {
         return (FeedbackPanel) page.visitChildren(new FeedbackPanelVisitor());
     }
-    
+   
+    /**
+     * @return the folder for uploads
+     */
+    public Folder getUploadFolder() {
+        return uploadFolder;
+    }
 }
