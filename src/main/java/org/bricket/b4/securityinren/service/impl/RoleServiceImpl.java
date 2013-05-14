@@ -63,4 +63,18 @@ public class RoleServiceImpl extends B4ServiceImpl implements RoleService {
         }
         return role;
     }
+
+    @Override
+    public List<Role> loadAllRoles() throws B4ServiceException {
+        try {
+            Iterable<Role> roles = roleRepository.findAll();
+            List<Role> res = new ArrayList<>();
+            for (Role role : roles) {
+                res.add(role);
+            }
+            return res;
+        } catch (Exception e) {
+            throw new B4ServiceException("error");
+        }
+    }
 }

@@ -16,6 +16,8 @@
  */
 package org.bricket.b4.securityinren.service;
 
+import java.util.List;
+
 import org.bricket.b4.core.service.B4Service;
 import org.bricket.b4.core.service.B4ServiceException;
 import org.bricket.b4.securityinren.entity.Role;
@@ -35,4 +37,7 @@ public interface RoleService extends B4Service {
     }
 
     Role saveRole(Role modelObject) throws B4ServiceException;
+    
+    List<Role> loadAllRoles() throws B4ServiceException;
+    
 }

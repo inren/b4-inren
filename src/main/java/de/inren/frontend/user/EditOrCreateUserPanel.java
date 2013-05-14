@@ -16,11 +16,17 @@
  */
 package de.inren.frontend.user;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
+import org.apache.wicket.extensions.markup.html.form.palette.Palette;
 import org.apache.wicket.extensions.validation.validator.RfcCompliantEmailAddressValidator;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.TextField;
@@ -30,9 +36,12 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.StringResourceModel;
+import org.apache.wicket.model.util.ListModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.bricket.b4.core.service.B4ServiceException;
+import org.bricket.b4.securityinren.entity.Role;
 import org.bricket.b4.securityinren.entity.User;
+import org.bricket.b4.securityinren.service.RoleService;
 import org.bricket.b4.securityinren.service.UserService;
 
 import de.inren.frontend.common.manage.IWorktopManageDelegate;
@@ -43,9 +52,13 @@ import de.inren.frontend.common.panel.IAdminPanel;
  * @author Ingo Renner
  */
 public class EditOrCreateUserPanel extends ABasePanel implements IAdminPanel {
+    
     @SpringBean
     private UserService userService;
 
+    @SpringBean
+    private RoleService roleService;
+    
     private IWorktopManageDelegate<User> delegate;
     
     final User user;
@@ -58,6 +71,10 @@ public class EditOrCreateUserPanel extends ABasePanel implements IAdminPanel {
             user = m.getObject();
         } else {
             user = new User();
+        }
+        // palette for role selection needs a non null object
+        if(user.getRoles()==null) {
+            user.setRoles(new HashSet<Role>());
         }
         this.delegate = delegate;
     }
@@ -96,6 +113,17 @@ public class EditOrCreateUserPanel extends ABasePanel implements IAdminPanel {
         form.add(new Label("lastname.label", lLname));
         form.add(new TextField<String>("lastname", String.class).setRequired(true).setLabel(lLname));
 
+        List<Role> allRoles = new ArrayList<Role>();
+        try {
+            allRoles = roleService.loadAllRoles();
+        } catch (B4ServiceException e1) {
+            e1.printStackTrace();
+        }
+        StringResourceModel lRoles = new StringResourceModel("roles.label", EditOrCreateUserPanel.this, null);
+        form.add(new Label("roles.label", lRoles));
+        
+        form.add(new Palette<Role>("roles", new ListModel<Role>(allRoles), new ChoiceRenderer<Role>("name","id"), 5, false));
+                
         form.add(new AjaxLink<Void>("cancel") {
             @Override
             public void onClick(AjaxRequestTarget target) {
