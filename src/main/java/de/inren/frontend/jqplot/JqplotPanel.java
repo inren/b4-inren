@@ -66,8 +66,8 @@ public class JqplotPanel extends Panel{
             @Override
             public void renderHead(Component component, IHeaderResponse response) {
                 super.renderHead(component, response);
-                response.render(JavaScriptHeaderItem.forReference(new JavaScriptResourceReference(JqplotPanel.class, "jquery.jqplot.1.0.7/jquery.jqplot.min.js")));
-                response.render(CssHeaderItem.forReference(new CssResourceReference(JqplotPanel.class, "jquery.jqplot.1.0.7/jquery.jqplot.min.css")));
+                response.render(JavaScriptHeaderItem.forReference(new JavaScriptResourceReference(JqplotPanel.class, "jquery.jqplot/jquery.jqplot.min.js")));
+                response.render(CssHeaderItem.forReference(new CssResourceReference(JqplotPanel.class, "jquery.jqplot/jquery.jqplot.min.css")));
                 for (String resource : getIJqplotDefinition().getAdditionalResources()) {
                     response.render(JavaScriptHeaderItem.forReference(new JavaScriptResourceReference(JqplotPanel.class, resource)));
                 }

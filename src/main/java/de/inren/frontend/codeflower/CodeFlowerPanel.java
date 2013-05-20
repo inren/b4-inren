@@ -46,8 +46,8 @@ public class CodeFlowerPanel extends ABasePanel {
             "var createCodeFlower = function(json) {" +
             "  if (currentCodeFlower) { currentCodeFlower.cleanup(); }" +
             "  var total = countElements(json);" +
-            "  w = parseInt(Math.sqrt(total) * 32, 10);" + "\n" +
-            "  h = parseInt(Math.sqrt(total) * 32, 10);" + "\n" +
+            "  w = parseInt(Math.sqrt(total) * 35, 10);" + "\n" +
+            "  h = parseInt(Math.sqrt(total) * 25, 10);" + "\n" +
             "  currentCodeFlower = new CodeFlower(\"#visualization\", w, h).update(json);" + "\n" +
             "};" + "\n" +
             "d3.json('$data', createCodeFlower);";

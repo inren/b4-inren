@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<java version="1.7.0_15" class="java.beans.XMLDecoder">
+ <object class="org.bricket.b4.securityinren.entity.Role">
+  <void property="id">
+   <long>3</long>
+  </void>
+  <void property="name">
+   <string>ROLE_ADMIN</string>
+  </void>
+ </object>
+ <object class="org.bricket.b4.securityinren.entity.Role">
+  <void property="id">
+   <long>4</long>
+  </void>
+  <void property="name">
+   <string>ROLE_USER</string>
+  </void>
+ </object>
+ <object class="org.bricket.b4.securityinren.entity.User">
+  <void property="email">
+   <string>user@localhost</string>
+  </void>
+  <void property="enabled">
+   <boolean>true</boolean>
+  </void>
+  <void property="groups">
+   <object class="java.util.HashSet"/>
+  </void>
+  <void property="id">
+   <long>3</long>
+  </void>
+  <void property="password">
+   <string>7e53bbbed0d975f6ecc4ba07eddb728cdceec6a7cd0d80dbcf0a996c5cda12883b1afc683b27c5cb</string>
+  </void>
+  <void property="roles">
+   <object class="java.util.HashSet">
+    <void method="add">
+     <object class="org.bricket.b4.securityinren.entity.Role" id="Role0">
+      <void property="id">
+       <long>4</long>
+      </void>
+      <void property="name">
+       <string>ROLE_USER</string>
+      </void>
+     </object>
+    </void>
+   </object>
+  </void>
+ </object>
+ <object class="org.bricket.b4.usersettings.entity.UserSettings">
+  <void property="id">
+   <long>2</long>
+  </void>
+  <void property="theme">
+   <string>cyborg</string>
+  </void>
+  <void property="uid">
+   <long>3</long>
+  </void>
+ </object>
+ <object class="org.bricket.b4.securityinren.entity.User">
+  <void property="email">
+   <string>admin@localhost</string>
+  </void>
+  <void property="enabled">
+   <boolean>true</boolean>
+  </void>
+  <void property="groups">
+   <object class="java.util.HashSet"/>
+  </void>
+  <void property="id">
+   <long>4</long>
+  </void>
+  <void property="password">
+   <string>776fe6d49b4b5e7bcacb6dda60bf1ce33f6a2046d69f1934d56c9ab5822b1debde7d97f0c3f78a87</string>
+  </void>
+  <void property="roles">
+   <object class="java.util.HashSet">
+    <void method="add">
+     <object class="org.bricket.b4.securityinren.entity.Role">
+      <void property="id">
+       <long>3</long>
+      </void>
+      <void property="name">
+       <string>ROLE_ADMIN</string>
+      </void>
+     </object>
+    </void>
+    <void method="add">
+     <object idref="Role0"/>
+    </void>
+   </object>
+  </void>
+ </object>
+ <object class="org.bricket.b4.usersettings.entity.UserSettings">
+  <void property="id">
+   <long>1</long>
+  </void>
+  <void property="theme">
+   <string>cyborg</string>
+  </void>
+  <void property="uid">
+   <long>4</long>
+  </void>
+ </object>
+ <object class="de.inren.frontend.common.backuprestore.EndMarker"/>
+</java>

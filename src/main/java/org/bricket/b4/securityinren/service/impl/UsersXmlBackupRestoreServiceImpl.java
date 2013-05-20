@@ -62,7 +62,7 @@ import de.inren.frontend.common.backuprestore.EndMarker;
  * @author Ingo Renner
  *
  */
-@Service(value = "usersXmlBackupRestoreServiceImpl")
+@Service(value = "usersXmlBackupRestoreService")
 @Transactional(readOnly = true)
 @Slf4j
 public class UsersXmlBackupRestoreServiceImpl extends B4ServiceImpl implements UsersXmlBackupRestoreService {

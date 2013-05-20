@@ -37,50 +37,58 @@ public class HealthJqplotDefinition implements IJqplotDefinition {
     private class Entry {
         private final String x;
         private final String y;
+        
         public Entry(String x, String y) {
             this.x = x;
             this.y = y;
         }
+        
         public String getX() {
             return x;
         }
+        
         public String getY() {
             return y;
-        }
-        
+        }        
     }
     
-    private MeasurementRepository measurementRepository;
-    
     private String fieldname;
-    
-    private long uid;
     
     private List<Entry> entries;
     
     public HealthJqplotDefinition(MeasurementRepository measurementRepository, String fieldname, long uid) {
-        this.measurementRepository = measurementRepository;
         this.fieldname = fieldname;
-        this.uid = uid;
         
         entries = new ArrayList<Entry>();
         List<Measurement> d = measurementRepository.findByUid(uid);
         SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd");
         
         for (Measurement m : d) {
-            IModel pm = new PropertyModel(m, fieldname);
+            IModel<Measurement> pm = new PropertyModel<Measurement>(m, fieldname);
             entries.add(new Entry(sd.format(m.getDate()), String.valueOf(pm.getObject())));
         }
     }
 
     @Override
     public String getPlotConfiguration() {
-        
-        String c = "{ title:'"+ fieldname + "', " +
-        		"axes:{xaxis:{renderer:$.jqplot.DateAxisRenderer}}," +
-        		" series:[{lineWidth:4, markerOptions:{style:'square'}}]}";
-        // "{ title:'Exponential Line', axes:{yaxis:{min:-10, max:240}}, series:[{color:'#5FAB78'}]}";
-        return c; 
+        return new StringBuffer()
+            .append("{")
+            .append("title:'").append(fieldname).append("'")        
+            .append(",")
+            .append("axes:{xaxis:{renderer:$.jqplot.DateAxisRenderer}}")
+            .append(",")
+            .append("canvasOverlay: {")
+                .append("show: true").append(",")
+                .append("objects: [")
+                    .append("{horizontalLine: {name: 'lower', y: 95, lineWidth: 1, color: 'rgb(255,193,37)', shadow: false}}")
+                    .append(",")
+                    .append("{horizontalLine: {name: 'normal', y: 100, lineWidth: 1, color: 'rgb(34,139,34)', shadow: true}}")
+                    .append(",")
+                    .append("{horizontalLine: {name: 'upper', y: 120, lineWidth: 1, color: 'rgb(205,55,0)', shadow: false}}")
+                .append("]")
+            .append("}")
+            .append("}")
+            .toString(); 
     }
 
     @Override
@@ -105,8 +113,8 @@ public class HealthJqplotDefinition implements IJqplotDefinition {
 
     @Override
     public List<String> getAdditionalResources() {
-        String plugin = "jquery.jqplot.1.0.7/plugins/jqplot.dateAxisRenderer.min.js";
-        return Arrays.asList(plugin);
+        String plugin1= "jquery.jqplot/plugins/jqplot.dateAxisRenderer.min.js";
+        String plugin2= "jquery.jqplot/plugins/jqplot.canvasOverlay.min.js";
+        return Arrays.asList(plugin1, plugin2);
     }
-
 }
