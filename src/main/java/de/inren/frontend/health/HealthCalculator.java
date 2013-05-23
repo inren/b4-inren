@@ -58,25 +58,27 @@ public class HealthCalculator {
     }
 
     public static enum BmiMeaning {
-        Very_Severely_Underweight(0.0, 15.0, 0.0, 0.60),
-        Severely_Underweight(15.0, 16.0, 0.60, 0.64),
-        Underweight(16.0, 18.5, 0.64, 0.74),
-        Normal(18.5, 2.05, 0.74, 1.0),
-        Overweight(25.0, 30.0, 1.0, 1.2),
-        Obese_Class_I(30.0, 35.0, 1.2, 1.4),
-        Obese_Class_II(35.0, 40.0,1.4, 1.6),
-        Obese_lass_III(40.0, null, 1.6, null);
+        Very_Severely_Underweight(0.0, 15.0, 0.0, 0.60, "#2A50FF"),
+        Severely_Underweight(15.0, 16.0, 0.60, 0.64, "#3A60BB"),
+        Underweight(16.0, 18.5, 0.64, 0.74, "#4A708B"),
+        Normal(18.5, 2.05, 0.74, 1.0, "#006400"),
+        Overweight(25.0, 30.0, 1.0, 1.2, "#FFFF00"),
+        Obese_Class_I(30.0, 35.0, 1.2, 1.4, "#FFA500"),
+        Obese_Class_II(35.0, 40.0,1.4, 1.6, "#FF0000"),
+        Obese_lass_III(40.0, null, 1.6, null, "#8B0000");
         
         private final Double bMin;
         private final Double bMax;
         private final Double bpMin;
         private final Double bpMax;
+        private String color;
 
-        private BmiMeaning(Double bMin, Double bMax, Double bpMin, Double bpMax) {
+        private BmiMeaning(Double bMin, Double bMax, Double bpMin, Double bpMax, String color) {
             this.bMin = bMin;
             this.bMax = bMax;
             this.bpMin = bpMin;
             this.bpMax = bpMax;
+            this.color = color;
         }
 
         public Double getbMin() {
@@ -93,6 +95,10 @@ public class HealthCalculator {
 
         public Double getBpMax() {
             return bpMax;
+        }
+        
+        public String getColor() {
+            return color;
         }
     }
 }

@@ -26,47 +26,29 @@ import org.apache.wicket.model.PropertyModel;
 import org.bricket.b4.health.entity.Measurement;
 import org.bricket.b4.health.repository.MeasurementRepository;
 
-import de.inren.frontend.jqplot.IJqplotDefinition;
+import de.inren.frontend.jqplot.AJqplotDefinition;
+import de.inren.frontend.jqplot.ChartEntry;
 
 /**
  * @author Ingo Renner
  *
  */
-public class HealthJqplotDefinition implements IJqplotDefinition {
-
-    private class Entry {
-        private final String x;
-        private final String y;
-        
-        public Entry(String x, String y) {
-            this.x = x;
-            this.y = y;
-        }
-        
-        public String getX() {
-            return x;
-        }
-        
-        public String getY() {
-            return y;
-        }        
-    }
+public class HealthJqplotDefinition extends AJqplotDefinition {
     
     private String fieldname;
-    
-    private List<Entry> entries;
     
     public HealthJqplotDefinition(MeasurementRepository measurementRepository, String fieldname, long uid) {
         this.fieldname = fieldname;
         
-        entries = new ArrayList<Entry>();
+        ArrayList<ChartEntry> data = new ArrayList<ChartEntry>();
         List<Measurement> d = measurementRepository.findByUid(uid);
         SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd");
         
         for (Measurement m : d) {
             IModel<Measurement> pm = new PropertyModel<Measurement>(m, fieldname);
-            entries.add(new Entry(sd.format(m.getDate()), String.valueOf(pm.getObject())));
+            data.add(new ChartEntry(sd.format(m.getDate()), String.valueOf(pm.getObject())));
         }
+        setEntries(data);
     }
 
     @Override
@@ -91,25 +73,6 @@ public class HealthJqplotDefinition implements IJqplotDefinition {
             .toString(); 
     }
 
-    @Override
-    public String getPlotData() {
-        StringBuilder sb = new StringBuilder();
-        String sep = "";
-        sb.append("[[");
-        for ( Entry e: entries) {
-            sb.append(sep)
-            .append("[")
-            .append("'")
-            .append(e.getX())
-            .append("'")
-            .append(",")
-            .append(e.getY())
-            .append("]");
-            sep=",";
-        }
-        sb.append("]]");
-        return sb.toString(); // "[[[1, 2],[3,5.12],[5,13.1],[7,33.6],[9,85.9],[11,219.9]]]";
-    }
 
     @Override
     public List<String> getAdditionalResources() {
@@ -117,4 +80,5 @@ public class HealthJqplotDefinition implements IJqplotDefinition {
         String plugin2= "jquery.jqplot/plugins/jqplot.canvasOverlay.min.js";
         return Arrays.asList(plugin1, plugin2);
     }
+
 }

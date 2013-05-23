@@ -25,7 +25,6 @@ import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 
 import org.apache.wicket.model.Model;
-import org.bricket.b4.health.entity.PlotWaterPage;
 import org.bricket.b4.securityinren.service.RoleService.Roles;
 
 import de.agilecoders.wicket.markup.html.bootstrap.navbar.INavbarComponent;
@@ -37,10 +36,11 @@ import de.inren.frontend.application.HomePage;
 import de.inren.frontend.auth.LoginPage;
 import de.inren.frontend.backup.BackupPage;
 import de.inren.frontend.health.BmiWikiPage;
-import de.inren.frontend.health.HealthChartPage;
 import de.inren.frontend.health.HealthSettingsPage;
 import de.inren.frontend.health.ManageMeasurementsPage;
 import de.inren.frontend.health.PlotFatPage;
+import de.inren.frontend.health.PlotWaterPage;
+import de.inren.frontend.health.PlotWeightPage;
 import de.inren.frontend.health.backup.BackupRestorePage;
 import de.inren.frontend.role.ManageRolesPage;
 import de.inren.frontend.user.ManageUsersPage;
@@ -170,7 +170,7 @@ public class NavigationProvider {
                             )
                 .addChild(new GNode<NavigationElement>(
                             new NavigationElement(ManageMeasurementsPage.class, "Health", healthRoles, ComponentPosition.LEFT), Arrays.asList(
-                                    new GNode<NavigationElement>(new NavigationElement(HealthChartPage.class, "Chart", healthRoles, ComponentPosition.LEFT)),
+                                    new GNode<NavigationElement>(new NavigationElement(PlotWeightPage.class, "Wheight", healthRoles, ComponentPosition.LEFT)),
                                     new GNode<NavigationElement>(new NavigationElement(PlotFatPage.class, "Fat", healthRoles, ComponentPosition.LEFT)),
                                     new GNode<NavigationElement>(new NavigationElement(PlotWaterPage.class, "Water", healthRoles, ComponentPosition.LEFT)),
                                     new GNode<NavigationElement>(new NavigationElement(BmiWikiPage.class, "BMI", healthRoles, ComponentPosition.LEFT)),

@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.bricket.b4.health.entity;
+package de.inren.frontend.health;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
@@ -23,7 +23,6 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.bricket.b4.health.repository.MeasurementRepository;
 
 import de.inren.frontend.common.templates.SecuredPage;
-import de.inren.frontend.health.HealthJqplotDefinition;
 import de.inren.frontend.jqplot.IJqplotDefinition;
 import de.inren.frontend.jqplot.JqplotPanel;
 

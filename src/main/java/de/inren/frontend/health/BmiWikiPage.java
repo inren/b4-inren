@@ -28,7 +28,6 @@ import org.wicketstuff.annotation.mount.MountPath;
 
 import de.inren.frontend.common.templates.SecuredPage;
 import de.inren.frontend.jqplot.IJqplotDefinition;
-import de.inren.frontend.jqplot.JqplotPanel;
 
 /**
  * @author Ingo Renner
@@ -45,16 +44,16 @@ public class BmiWikiPage extends SecuredPage<IJqplotDefinition> {
 
     @Override
     public Component createPanel(String wicketId) {
-        return new JqplotPanel(wicketId, createJqplotModel());
+        return new BmiChartPanel(wicketId, createJqplotModel());
     }
 
     final IModel<IJqplotDefinition> createJqplotModel() {
         HealthSettings s = new HealthSettings();
         try {
-             s = healthSettingsService.loadByUser(2L);
+             s = healthSettingsService.loadByUser(getUid());
         } catch (B4ServiceException e) {
             e.printStackTrace();
         }
-        return new Model<IJqplotDefinition>(new BmiJqplotDefinition(measurementRepository, s, "weight", 2));
+        return new Model<IJqplotDefinition>(new BmiJqplotDefinition(measurementRepository, s, "weight", getUid()));
     }
 }

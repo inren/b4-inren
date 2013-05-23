@@ -21,6 +21,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.bricket.b4.health.repository.MeasurementRepository;
+import org.wicketstuff.annotation.mount.MountPath;
 
 import de.inren.frontend.common.templates.SecuredPage;
 import de.inren.frontend.jqplot.IJqplotDefinition;
@@ -30,13 +31,10 @@ import de.inren.frontend.jqplot.JqplotPanel;
  * @author Ingo Renner
  *
  */
-public class PlotFatPage extends SecuredPage<IJqplotDefinition> {
+@MountPath(value = "/plotBmi")
+public class PlotBmiPage extends SecuredPage<IJqplotDefinition> {
     @SpringBean
     private MeasurementRepository measurementRepository;
-
-    public PlotFatPage() {
-        super();
-    }
 
     @Override
     public Component createPanel(String wicketId) {
@@ -44,6 +42,6 @@ public class PlotFatPage extends SecuredPage<IJqplotDefinition> {
     }
 
     final IModel<IJqplotDefinition> createJqplotModel() {
-        return new Model<IJqplotDefinition>(new HealthJqplotDefinition(measurementRepository, "fat", getUid()));
+        return new Model<IJqplotDefinition>(new HealthJqplotDefinition(measurementRepository, "weight", getUid()));
     }
 }

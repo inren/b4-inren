@@ -31,8 +31,8 @@ import de.inren.frontend.jqplot.JqplotPanel;
  * @author Ingo Renner
  *
  */
-@MountPath(value = "/healthchart")
-public class HealthChartPage extends SecuredPage<IJqplotDefinition> {
+@MountPath(value = "/plotWeight")
+public class PlotWeightPage extends SecuredPage<IJqplotDefinition> {
     @SpringBean
     private MeasurementRepository measurementRepository;
 

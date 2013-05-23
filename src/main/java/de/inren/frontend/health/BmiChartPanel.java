@@ -14,25 +14,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.inren.frontend.jqplot;
+package de.inren.frontend.health;
 
-import java.io.Serializable;
-import java.util.List;
+import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.IModel;
 
+import de.inren.frontend.jqplot.IJqplotDefinition;
+import de.inren.frontend.jqplot.JqplotPanel;
 
 /**
  * @author Ingo Renner
- *
+ * 
  */
-public interface IJqplotDefinition extends Serializable {
-    
-    String getPlotConfiguration();
-    
-    String getPlotData();
-    
-    List<String> getAdditionalResources();
-    
-    List<ChartEntry> getEntries();
-    
-    void setEntries(List<ChartEntry> entries);
+public class BmiChartPanel extends Panel {
+
+    public BmiChartPanel(String id, IModel<IJqplotDefinition> model) {
+        super(id, model);
+        add(new JqplotPanel("chart", model));
+        add(new BmiDefinitionPanel("definition"));
+    }
+
 }

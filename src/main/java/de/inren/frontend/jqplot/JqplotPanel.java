@@ -31,7 +31,7 @@ import org.apache.wicket.request.resource.JavaScriptResourceReference;
  * @author Ingo Renner
  *
  */
-public class JqplotPanel extends Panel{
+public class JqplotPanel extends Panel {
 
     public JqplotPanel(String id, IModel<IJqplotDefinition> model) {
         super(id, model);

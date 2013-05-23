@@ -16,23 +16,27 @@
  */
 package de.inren.frontend.jqplot;
 
-import java.io.Serializable;
-import java.util.List;
-
-
 /**
  * @author Ingo Renner
  *
  */
-public interface IJqplotDefinition extends Serializable {
+public class ChartEntry {
+
+    private final String x;
     
-    String getPlotConfiguration();
+    private final String y;
     
-    String getPlotData();
+    public ChartEntry(String x, String y) {
+        this.x = x;
+        this.y = y;
+    }
     
-    List<String> getAdditionalResources();
+    public String getX() {
+        return x;
+    }
     
-    List<ChartEntry> getEntries();
-    
-    void setEntries(List<ChartEntry> entries);
+    public String getY() {
+        return y;
+    }
+
 }
