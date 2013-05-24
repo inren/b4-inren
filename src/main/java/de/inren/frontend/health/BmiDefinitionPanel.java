@@ -31,9 +31,13 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.StringResourceModel;
 
+import de.inren.frontend.common.panel.ExternalLinkWithMarkup;
 import de.inren.frontend.health.HealthCalculator.BmiMeaning;
 
 /**
+ * 
+ * Display the definition of the BMI values with links to wikipedia for more information.
+ * 
  * @author Ingo Renner
  *
  */
@@ -79,6 +83,8 @@ public class BmiDefinitionPanel extends Panel {
         add(new Label("info.label", new StringResourceModel("info.label", BmiDefinitionPanel.this, null)));
         
         final AttributeAppender center = new AttributeAppender("align", Model.of("center"));
+        final AttributeAppender newTab = new AttributeAppender("target", Model.of("_blank"));
+        final AttributeAppender border = new AttributeAppender("style", Model.of("border-top: 1px solid #aaa;"));
         
         add(new DataView<BmiMeaning>("rows", getDataProvider()) {
 
@@ -94,26 +100,56 @@ public class BmiDefinitionPanel extends Panel {
                         item.add(new Label("range", String.valueOf(bmi.getbMin()) + "-" + String.valueOf(bmi.getbMax())).add(center));
                     }
                     else {
-                        item.add(new Label("range", String.valueOf("≤" + String.valueOf(bmi.getbMax()))).add(center));
+                        item.add(new Label("range", String.valueOf("≤ " + String.valueOf(bmi.getbMax()))).add(center));
                     }
                 } else {
-                    item.add(new Label("range", String.valueOf("≥" + String.valueOf(bmi.getbMin()))).add(center));
+                    item.add(new Label("range", String.valueOf("≥ " + String.valueOf(bmi.getbMin()))).add(center));
                 }
+                
+                // Add wiki links
                 switch (bmi) {
                 case Normal:
-                    item.add(new Label("info", new StringResourceModel(bmi.name()+".info.label", BmiDefinitionPanel.this, null)).add(center));
+                    item.add(new ExternalLinkWithMarkup("info", 
+                            new StringResourceModel(bmi.name()+".info.url", BmiDefinitionPanel.this, null),
+                            new StringResourceModel(bmi.name()+".info.label", BmiDefinitionPanel.this, null),
+                            newTab)
+                        .add(center));
                     break;
                 case Severely_Underweight:
-                    item.add(new Label("info", new StringResourceModel(bmi.name()+".info.label", BmiDefinitionPanel.this, null)).add(center));
+                    item.add(new ExternalLinkWithMarkup("info",
+                            new StringResourceModel(bmi.name()+".info.url", BmiDefinitionPanel.this, null),
+                            new StringResourceModel(bmi.name()+".info.label", BmiDefinitionPanel.this, null),
+                            newTab)
+                        .add(center));
                     break;
                 case Overweight:
-                    item.add(new Label("info", new StringResourceModel(bmi.name()+".info.label", BmiDefinitionPanel.this, null)).add(center));
+                    item.add(new ExternalLinkWithMarkup("info", 
+                            new StringResourceModel(bmi.name()+".info.url", BmiDefinitionPanel.this, null),
+                            new StringResourceModel(bmi.name()+".info.label", BmiDefinitionPanel.this, null),
+                            newTab)
+                        .add(center));
                     break;
                 case Obese_Class_II:
-                    item.add(new Label("info", new StringResourceModel(bmi.name()+".info.label", BmiDefinitionPanel.this, null)).add(center));
+                    item.add(new ExternalLinkWithMarkup("info", 
+                            new StringResourceModel(bmi.name()+".info.url", BmiDefinitionPanel.this, null),
+                            new StringResourceModel(bmi.name()+".info.label", BmiDefinitionPanel.this, null),
+                            newTab)
+                        .add(center));
                     break;
                 default:
                     item.add(new Label("info",""));
+                }
+                // Add borders to mark the groups
+                switch (bmi) {
+                case Normal:
+                    item.add(border);
+                    break;
+                case Overweight:
+                    item.add(border);
+                    break;
+                case Underweight:
+                    item.add(border);
+                    break;
                 }
             }
         });

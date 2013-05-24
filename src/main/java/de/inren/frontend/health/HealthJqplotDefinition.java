@@ -58,17 +58,6 @@ public class HealthJqplotDefinition extends AJqplotDefinition {
             .append("title:'").append(fieldname).append("'")        
             .append(",")
             .append("axes:{xaxis:{renderer:$.jqplot.DateAxisRenderer}}")
-            .append(",")
-            .append("canvasOverlay: {")
-                .append("show: true").append(",")
-                .append("objects: [")
-                    .append("{horizontalLine: {name: 'lower', y: 95, lineWidth: 1, color: 'rgb(255,193,37)', shadow: false}}")
-                    .append(",")
-                    .append("{horizontalLine: {name: 'normal', y: 100, lineWidth: 1, color: 'rgb(34,139,34)', shadow: true}}")
-                    .append(",")
-                    .append("{horizontalLine: {name: 'upper', y: 120, lineWidth: 1, color: 'rgb(205,55,0)', shadow: false}}")
-                .append("]")
-            .append("}")
             .append("}")
             .toString(); 
     }
@@ -77,8 +66,7 @@ public class HealthJqplotDefinition extends AJqplotDefinition {
     @Override
     public List<String> getAdditionalResources() {
         String plugin1= "jquery.jqplot/plugins/jqplot.dateAxisRenderer.min.js";
-        String plugin2= "jquery.jqplot/plugins/jqplot.canvasOverlay.min.js";
-        return Arrays.asList(plugin1, plugin2);
+        return Arrays.asList(plugin1);
     }
 
 }
