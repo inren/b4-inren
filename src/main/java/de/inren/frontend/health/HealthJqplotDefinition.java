@@ -55,9 +55,25 @@ public class HealthJqplotDefinition extends AJqplotDefinition {
     public String getPlotConfiguration() {
         return new StringBuffer()
             .append("{")
-            .append("title:'").append(fieldname).append("'")        
+                .append("title:'").append(fieldname).append("'")        
             .append(",")
-            .append("axes:{xaxis:{renderer:$.jqplot.DateAxisRenderer}}")
+                .append("axes:{")
+                        .append("xaxis:{")
+                            .append("renderer:$.jqplot.DateAxisRenderer")
+                            .append(",")
+                            .append("tickRenderer: $.jqplot.CanvasAxisTickRenderer")
+                            .append(",")
+                            .append("tickOptions: {angle: -30} ")
+                        .append("}")
+                .append("}")
+            .append(",")
+                .append("canvasOverlay: {")
+                    .append("show: true")
+                .append("}")
+            .append(",")
+                .append("series:[{lineWidth:1, markerOptions:{style:'square'}}]")
+            .append(",")
+                .append("cursor:{show: true, zoom: true }")
             .append("}")
             .toString(); 
     }
@@ -65,8 +81,11 @@ public class HealthJqplotDefinition extends AJqplotDefinition {
 
     @Override
     public List<String> getAdditionalResources() {
-        String plugin1= "jquery.jqplot/plugins/jqplot.dateAxisRenderer.min.js";
-        return Arrays.asList(plugin1);
+        return Arrays.asList("jquery.jqplot/plugins/jqplot.dateAxisRenderer.min.js",
+                "jquery.jqplot/plugins/jqplot.canvasOverlay.min.js",
+                "jquery.jqplot/plugins/jqplot.cursor.min.js",
+                "jquery.jqplot/plugins/jqplot.canvasTextRenderer.min.js",
+                "jquery.jqplot/plugins/jqplot.canvasAxisTickRenderer.min.js"
+                );
     }
-
 }

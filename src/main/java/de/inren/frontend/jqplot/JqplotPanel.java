@@ -16,7 +16,13 @@
  */
 package de.inren.frontend.jqplot;
 
+import java.io.IOException;
+import java.util.Scanner;
+
+import lombok.extern.slf4j.Slf4j;
+
 import org.apache.wicket.Component;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
@@ -24,13 +30,17 @@ import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
+import org.apache.wicket.util.resource.IResourceStream;
+import org.apache.wicket.util.resource.ResourceStreamNotFoundException;
 
 /**
  * @author Ingo Renner
  *
  */
+@Slf4j
 public class JqplotPanel extends Panel {
 
     public JqplotPanel(String id, IModel<IJqplotDefinition> model) {
@@ -42,6 +52,7 @@ public class JqplotPanel extends Panel {
         super.onInitialize();
 
         add(getJqplotBehavior());
+        add(new AttributeAppender("class", Model.of("jqplot-target")));
     }
 
     private IJqplotDefinition getIJqplotDefinition() {
@@ -66,15 +77,44 @@ public class JqplotPanel extends Panel {
             @Override
             public void renderHead(Component component, IHeaderResponse response) {
                 super.renderHead(component, response);
+                
                 response.render(JavaScriptHeaderItem.forReference(new JavaScriptResourceReference(JqplotPanel.class, "jquery.jqplot/jquery.jqplot.min.js")));
                 response.render(CssHeaderItem.forReference(new CssResourceReference(JqplotPanel.class, "jquery.jqplot/jquery.jqplot.min.css")));
                 for (String resource : getIJqplotDefinition().getAdditionalResources()) {
                     response.render(JavaScriptHeaderItem.forReference(new JavaScriptResourceReference(JqplotPanel.class, resource)));
                 }
-                String json = createJquery();
-                response.render(OnDomReadyHeaderItem.forScript(json));
+
+                response.render(OnDomReadyHeaderItem.forScript(createJquery()));
+
+                final JavaScriptResourceReference jsr = new JavaScriptResourceReference(JqplotPanel.class, "JqplotPanel.js");
+                jsr.getResource().setCompress(true);
+                IResourceStream is = jsr.getResource().getResourceStream();
+                final String jqplotPanel_js = convertStreamToString(is);
+                if (jqplotPanel_js!=null) {
+                    log.info("JqplotPanel.js conmtent:\n" + jqplotPanel_js );
+                    response.render(OnDomReadyHeaderItem.forScript(jqplotPanel_js));
+                } else {
+                    log.error("Could not read JqplotPanel.js");
+                }
             }
 
         };
+    }
+    
+    public static String convertStreamToString(IResourceStream is) {
+        String res = null;
+        try {
+            @SuppressWarnings("resource")
+            Scanner s = new Scanner(is.getInputStream(), "UTF-8").useDelimiter("\\A");
+            res = s.hasNext() ? s.next() : null;
+            is.close();
+        } catch (ResourceStreamNotFoundException e) {
+            log.error(e.getMessage(), e);
+            res = null;
+        } catch (IOException e) {
+            log.error(e.getMessage(), e);
+            res = null;
+        }
+        return res;
     }
 }
