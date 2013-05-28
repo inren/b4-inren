@@ -91,7 +91,6 @@ public class JqplotPanel extends Panel {
                 IResourceStream is = jsr.getResource().getResourceStream();
                 final String jqplotPanel_js = convertStreamToString(is);
                 if (jqplotPanel_js!=null) {
-                    log.info("JqplotPanel.js conmtent:\n" + jqplotPanel_js );
                     response.render(OnDomReadyHeaderItem.forScript(jqplotPanel_js));
                 } else {
                     log.error("Could not read JqplotPanel.js");

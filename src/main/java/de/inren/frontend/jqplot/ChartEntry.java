@@ -16,11 +16,13 @@
  */
 package de.inren.frontend.jqplot;
 
+import java.io.Serializable;
+
 /**
  * @author Ingo Renner
  *
  */
-public class ChartEntry {
+public class ChartEntry implements Serializable {
 
     private final String x;
     
