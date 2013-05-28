@@ -47,6 +47,7 @@ import de.agilecoders.wicket.markup.html.bootstrap.navbar.NavbarButton;
 import de.agilecoders.wicket.settings.IBootstrapSettings;
 import de.inren.frontend.auth.LoginPage;
 import de.inren.frontend.auth.LogoutPage;
+import de.inren.frontend.common.language.LanguageSwitcherPanel;
 import de.inren.frontend.common.session.B4WebSession;
 import de.inren.frontend.navigation.GNode;
 import de.inren.frontend.navigation.NavList;
@@ -136,6 +137,9 @@ public class TemplatePage<T> extends GenericWebPage<T> {
                     new NavbarButton<LoginPage>(LoginPage.class, Model.of("Login")).setIconType(IconType.globe), ComponentPosition.RIGHT)
             );
     	}
+    	// change language
+    	components.add(new ImmutableNavbarComponent(
+    	        new LanguageSwitcherPanel("component"), ComponentPosition.RIGHT));
     	navbar.addComponents(components);
     	return navbar;
     }

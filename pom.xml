@@ -76,9 +76,9 @@
 		<spring-security-oauth.version>1.0.0.RELEASE</spring-security-oauth.version>
 		<spring-data-jpa.version>1.2.0.RELEASE</spring-data-jpa.version>
 		<!-- Wicket core -->
-		<wicket.version>6.7.0</wicket.version>
+		<wicket.version>6.8.0</wicket.version>
 		<!-- Add your project specific versions here -->
-		<wicketstuff.version>6.7.0</wicketstuff.version>
+		<wicketstuff.version>6.8.0</wicketstuff.version>
 		<bootstrap.version>0.8.1</bootstrap.version>
 	</properties>
 
