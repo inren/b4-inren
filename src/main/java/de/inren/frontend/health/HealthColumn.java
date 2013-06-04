@@ -16,8 +16,6 @@
  */
 package de.inren.frontend.health;
 
-import lombok.extern.slf4j.Slf4j;
-
 import org.apache.wicket.Component;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
@@ -35,7 +33,6 @@ import de.agilecoders.wicket.markup.html.bootstrap.behavior.CssClassNameModifier
  * @author Ingo Renner
  *
  */
-@Slf4j
 public class HealthColumn<Measurement> extends PropertyColumn<Measurement, String> {
 
     public HealthColumn(IModel<String> displayModel, String sortProperty, String propertyExpression) {
@@ -44,7 +41,6 @@ public class HealthColumn<Measurement> extends PropertyColumn<Measurement, Strin
 
     @Override
     public void populateItem(Item<ICellPopulator<Measurement>> item, String componentId, IModel<Measurement> rowModel) {
-        log.debug("adding item");
         item.add(new MeasurementTabEntryPanel<Measurement>(componentId, rowModel, getDisplayModel()));
         PropertyModel<Double> pm = new PropertyModel<Double>(rowModel, getDisplayModel().getObject() + "Delta");
         item.add(getHealthBehavior());

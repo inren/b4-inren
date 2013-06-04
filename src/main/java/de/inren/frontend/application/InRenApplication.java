@@ -125,6 +125,7 @@ public class InRenApplication extends WebApplication implements IB4Application {
                 try {
                     return super.getString(key, component, model, locale, style, defaultValue);
                 } catch (MissingResourceException e) {
+                    log.info("######### Missing: " + e.getMessage());
                     return key + (locale==null? "": locale.getLanguage());
                 }
             }

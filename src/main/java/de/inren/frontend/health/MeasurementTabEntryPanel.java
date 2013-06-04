@@ -16,8 +16,6 @@
  */
 package de.inren.frontend.health;
 
-import lombok.extern.slf4j.Slf4j;
-
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
@@ -27,7 +25,6 @@ import org.apache.wicket.model.PropertyModel;
  * @author Ingo Renner
  *
  */
-@Slf4j
 public class MeasurementTabEntryPanel<Measurement> extends Panel {
 
     private final String property;
@@ -35,7 +32,6 @@ public class MeasurementTabEntryPanel<Measurement> extends Panel {
     public MeasurementTabEntryPanel(String id, IModel<Measurement> model, IModel<String> displayModel) {
         super(id, model);
         this.property = displayModel.getObject();
-        log.debug("Adding Labels");
         add(new Label("value", new PropertyModel<Long>(model.getObject(), property)));
         add(new Label("delta", new PropertyModel<Long>(model.getObject(), property + "Delta")));
     }

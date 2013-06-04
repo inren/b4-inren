@@ -18,16 +18,21 @@ package de.inren.frontend.navigation;
 
 import java.util.List;
 
+import lombok.extern.slf4j.Slf4j;
+
+import org.apache.wicket.Page;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.model.Model;
+import org.apache.wicket.model.StringResourceModel;
+import org.bricket.b4.core.service.UncheckedRuntimeException;
 
 /**
  * @author Ingo Renner
  *
  */
+@Slf4j
 public class NavList extends Panel {
     
     private GNode<NavigationElement> node;
@@ -56,15 +61,28 @@ public class NavList extends Panel {
             protected void populateItem(ListItem<GNode<NavigationElement>> item) {
                 
                 NavigationElement data = item.getModel().getObject().getData();
-                item.add(new NavListItem("nav-li", data.getClazz(), Model.of(data.getLanguageKey())));
+                    item.add(new NavListItem("nav-li", data.getClazz(), 
+                            new StringResourceModel(data.getLanguageKey(), getComponent(data), null)));
                 if (item.getModel().getObject().getChildren().isEmpty()) {
                     item.add(new Label("nav-sub", "").setVisible(false));
                 } else {
                     item.add(new NavList("nav-sub", item.getModel().getObject()));
                 }
             }
+
         };
         add(listview);
     }
     
+    protected Page getComponent(NavigationElement data) {
+        try {
+            return data.getClazz().newInstance();
+        } catch (InstantiationException e) {
+            log.error(e.getMessage(),e);
+            throw new UncheckedRuntimeException(e.getMessage());
+        } catch (IllegalAccessException e) {
+            log.error(e.getMessage(),e);
+            throw new UncheckedRuntimeException(e.getMessage());
+        }
+    }
 }

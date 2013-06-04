@@ -24,7 +24,8 @@ import java.util.List;
 
 import lombok.extern.slf4j.Slf4j;
 
-import org.apache.wicket.model.Model;
+import org.apache.wicket.Component;
+import org.apache.wicket.model.StringResourceModel;
 import org.bricket.b4.securityinren.service.RoleService.Roles;
 
 import de.agilecoders.wicket.markup.html.bootstrap.navbar.INavbarComponent;
@@ -54,7 +55,7 @@ import de.inren.frontend.wicketstuff.Lightbox2Page;
  * 
  * Decide wich item apears under wich navigationbar.
  * 
- * Hard coded version. Has to be replaced by a db service one in the future.
+ * Hard coded version. Has to be replaced by a db service once in the future.
  * 
  * @author Ingo Renner
  *
@@ -79,24 +80,24 @@ public class NavigationProvider {
         return navigationProvider;
     }
     
-    public List<INavbarComponent> getTopNavbarComponents(Collection<String> roles) {
+    public List<INavbarComponent> getTopNavbarComponents(Collection<String> roles, Component component) {
         
         List<INavbarComponent> res = new ArrayList<INavbarComponent>();
         // Root
         if (hasRight(tree.getRoot().getData().getRoles(), roles)) {
-            res.add(createINavbarComponent(tree.getRoot().getData()));
+            res.add(createINavbarComponent(tree.getRoot().getData(), component));
         }
         // and 1 level
         for (GNode<NavigationElement> e : tree.getRoot().getChildren()) {
             if (hasRight(e.getData().getRoles(), roles)) {
-                res.add(createINavbarComponent(e.getData()));
+                res.add(createINavbarComponent(e.getData(), component));
             }
         }
         
         return res;
     }
 
-    public GNode<NavigationElement> getSideNavbarComponents(Class clazz, Collection<String> roles) {
+    public GNode<NavigationElement> getSideNavbarComponents(Class clazz, Collection<String> roles, Component component) {
 
         GNode<NavigationElement> res = null;
         GNode<NavigationElement> r = null;
@@ -134,8 +135,13 @@ public class NavigationProvider {
         return null;
     }
 
-    private INavbarComponent createINavbarComponent(NavigationElement data) {
-        return new ImmutableNavbarComponent(new NavbarButton<LoginPage>(data.getClazz(), Model.of(data.getLanguageKey())), data.getPosition());
+    private INavbarComponent createINavbarComponent(NavigationElement data, Component component) {
+        return new ImmutableNavbarComponent(
+                new NavbarButton<LoginPage>(
+                        data.getClazz(), 
+                        new StringResourceModel(data.getLanguageKey(), component, null)),
+                        data.getPosition()
+                    );
     }
 
     private boolean hasRight(List<String> needRoles, Collection<String> givenRoles) {
@@ -158,37 +164,38 @@ public class NavigationProvider {
         
         // static hack to speed up development for other places
         GNode<NavigationElement> root = 
-            new GNode<NavigationElement>(new NavigationElement(HomePage.class, "Home", EMPTY_LIST, ComponentPosition.LEFT))
+            new GNode<NavigationElement>(new NavigationElement(HomePage.class, "Home.label", EMPTY_LIST, ComponentPosition.LEFT))
                 .addChild(new GNode<NavigationElement>(
-                            new NavigationElement(Lightbox2Page.class, "WicketStuff", EMPTY_LIST, ComponentPosition.LEFT), Arrays.asList(
-                                    new GNode<NavigationElement>(new NavigationElement(Lightbox2Page.class, "Lightbox2", EMPTY_LIST, ComponentPosition.LEFT)),
-                                    new GNode<NavigationElement>(new NavigationElement(Gmap3Page.class, "Gmap3", EMPTY_LIST, ComponentPosition.LEFT)),
-                                    new GNode<NavigationElement>(new NavigationElement(InmethodGridPage.class, "Inmethod Grid", EMPTY_LIST, ComponentPosition.LEFT)),
-                                    new GNode<NavigationElement>(new NavigationElement(EditableGridPage.class, "Editable Grid", EMPTY_LIST, ComponentPosition.LEFT))
+                            new NavigationElement(Lightbox2Page.class, "WicketStuff.label", EMPTY_LIST, ComponentPosition.LEFT), Arrays.asList(
+                                    new GNode<NavigationElement>(new NavigationElement(Lightbox2Page.class, "Lightbox2.label", EMPTY_LIST, ComponentPosition.LEFT)),
+                                    new GNode<NavigationElement>(new NavigationElement(Gmap3Page.class, "Gmap3.label", EMPTY_LIST, ComponentPosition.LEFT)),
+                                    new GNode<NavigationElement>(new NavigationElement(InmethodGridPage.class, "InmethodGrid.label", EMPTY_LIST, ComponentPosition.LEFT)),
+                                    new GNode<NavigationElement>(new NavigationElement(EditableGridPage.class, "EditableGrid.label", EMPTY_LIST, ComponentPosition.LEFT))
                                     )
                                 )
                             )
                 .addChild(new GNode<NavigationElement>(
-                            new NavigationElement(ManageMeasurementsPage.class, "Health", healthRoles, ComponentPosition.LEFT), Arrays.asList(
-                                    new GNode<NavigationElement>(new NavigationElement(PlotWeightPage.class, "Wheight", healthRoles, ComponentPosition.LEFT)),
-                                    new GNode<NavigationElement>(new NavigationElement(PlotFatPage.class, "Fat", healthRoles, ComponentPosition.LEFT)),
-                                    new GNode<NavigationElement>(new NavigationElement(PlotWaterPage.class, "Water", healthRoles, ComponentPosition.LEFT)),
-                                    new GNode<NavigationElement>(new NavigationElement(BmiWikiPage.class, "BMI", healthRoles, ComponentPosition.LEFT)),
-                                    new GNode<NavigationElement>(new NavigationElement(BackupRestorePage.class, "Backup/Restore", healthRoles, ComponentPosition.LEFT)),
-                                    new GNode<NavigationElement>(new NavigationElement(HealthSettingsPage.class, "Settings", Arrays.asList(Roles.ROLE_ADMIN.name()), ComponentPosition.LEFT))
+                            new NavigationElement(ManageMeasurementsPage.class, "Health.label", healthRoles, ComponentPosition.LEFT), Arrays.asList(
+                                    new GNode<NavigationElement>(new NavigationElement(PlotWeightPage.class, "Wheight.label", healthRoles, ComponentPosition.LEFT)),
+                                    new GNode<NavigationElement>(new NavigationElement(PlotFatPage.class, "Fat.label", healthRoles, ComponentPosition.LEFT)),
+                                    new GNode<NavigationElement>(new NavigationElement(PlotWaterPage.class, "Water.label", healthRoles, ComponentPosition.LEFT)),
+                                    new GNode<NavigationElement>(new NavigationElement(BmiWikiPage.class, "BMI.label", healthRoles, ComponentPosition.LEFT)),
+                                    new GNode<NavigationElement>(new NavigationElement(BackupRestorePage.class, "Backup/Restore.label", healthRoles, ComponentPosition.LEFT)),
+                                    new GNode<NavigationElement>(new NavigationElement(HealthSettingsPage.class, "Settings.label", Arrays.asList(Roles.ROLE_ADMIN.name()), ComponentPosition.LEFT))
                                     )
                                 )
                             )
                 .addChild(new GNode<NavigationElement>(
-                            new NavigationElement(AdminPage.class, "Admin", Arrays.asList(Roles.ROLE_ADMIN.name()), ComponentPosition.RIGHT), Arrays.asList(
-                                    new GNode<NavigationElement>(new NavigationElement(ManageUsersPage.class, "Users", Arrays.asList(Roles.ROLE_ADMIN.name()), ComponentPosition.LEFT)),
-                                    new GNode<NavigationElement>(new NavigationElement(ManageRolesPage.class, "Roles", Arrays.asList(Roles.ROLE_ADMIN.name()), ComponentPosition.LEFT)),
-                                    new GNode<NavigationElement>(new NavigationElement(BackupPage.class, "Backup", Arrays.asList(Roles.ROLE_ADMIN.name()), ComponentPosition.LEFT))
+                            new NavigationElement(AdminPage.class, "Admin.label", Arrays.asList(Roles.ROLE_ADMIN.name()), ComponentPosition.RIGHT), Arrays.asList(
+                                    new GNode<NavigationElement>(new NavigationElement(ManageUsersPage.class, "Users.label", Arrays.asList(Roles.ROLE_ADMIN.name()), ComponentPosition.LEFT)),
+                                    new GNode<NavigationElement>(new NavigationElement(ManageRolesPage.class, "Roles.label", Arrays.asList(Roles.ROLE_ADMIN.name()), ComponentPosition.LEFT)),
+                                    new GNode<NavigationElement>(new NavigationElement(BackupPage.class, "Backup.label", Arrays.asList(Roles.ROLE_ADMIN.name()), ComponentPosition.LEFT))
                                 )
                             )
                         )
-                .addChild(new GNode<NavigationElement>(new NavigationElement(UserSettingsPage.class, "Settings", Arrays.asList(Roles.ROLE_USER.name(), Roles.ROLE_ADMIN.name()), ComponentPosition.RIGHT))
+                .addChild(new GNode<NavigationElement>(new NavigationElement(UserSettingsPage.class, "Settings.label", Arrays.asList(Roles.ROLE_USER.name(), Roles.ROLE_ADMIN.name()), ComponentPosition.RIGHT))
               );
         tree = new GTree<NavigationElement>(root);
     }
+
 }

@@ -18,6 +18,7 @@ package de.inren.frontend.admin;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.model.StringResourceModel;
 
 import de.inren.frontend.common.templates.SecuredPage;
 
@@ -29,7 +30,8 @@ import de.inren.frontend.common.templates.SecuredPage;
 public class AdminPage extends SecuredPage {
 
     public Component createPanel(String wicketId) {
-        return new Label(wicketId, "Choose action from left menu.");
+        return new Label(wicketId, 
+                new StringResourceModel("AdminPage.info", AdminPage.this, null));
     }
 
 }

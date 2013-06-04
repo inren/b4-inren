@@ -29,6 +29,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.StringValue;
 
@@ -123,18 +124,22 @@ public class TemplatePage<T> extends GenericWebPage<T> {
     	// show brand name
     	navbar.brandName(Model.of("InRen"));
 
-    	navbar.addComponents(NavigationProvider.get().getTopNavbarComponents(getActivePermissions()));
+    	navbar.addComponents(NavigationProvider.get().getTopNavbarComponents(getActivePermissions(), TemplatePage.this));
     	
     	// Theme selector on the right.
     	final List<INavbarComponent> components = new ArrayList<INavbarComponent>();
     	// components.add(new ImmutableNavbarComponent(new ThemesDropDown(), Navbar.ComponentPosition.RIGHT));
     	if (isSignedIn()) {
     	    components.add(new ImmutableNavbarComponent(
-    	            new NavbarButton<LogoutPage>(LogoutPage.class, Model.of("Logout")).setIconType(IconType.globe), ComponentPosition.RIGHT)
+    	            new NavbarButton<LogoutPage>(LogoutPage.class, 
+    	                new StringResourceModel("logout.label", TemplatePage.this, null)
+    	                    ).setIconType(IconType.globe), ComponentPosition.RIGHT)
     	    );
     	} else {
             components.add(new ImmutableNavbarComponent(
-                    new NavbarButton<LoginPage>(LoginPage.class, Model.of("Login")).setIconType(IconType.globe), ComponentPosition.RIGHT)
+                    new NavbarButton<LoginPage>(LoginPage.class, 
+                            new StringResourceModel("login.label", TemplatePage.this, null)
+                            ).setIconType(IconType.globe), ComponentPosition.RIGHT)
             );
     	}
     	// change language
@@ -176,7 +181,7 @@ public class TemplatePage<T> extends GenericWebPage<T> {
     
     protected Component getLeftComponent(String id) {
         log.debug("getLeftComponent for class: " + getClass());
-        GNode<NavigationElement> menu = NavigationProvider.get().getSideNavbarComponents(getClass(), getActivePermissions());
+        GNode<NavigationElement> menu = NavigationProvider.get().getSideNavbarComponents(getClass(), getActivePermissions(), TemplatePage.this);
         if (menu==null) {
             return new Label(id, "").setVisible(false);
         } else {
